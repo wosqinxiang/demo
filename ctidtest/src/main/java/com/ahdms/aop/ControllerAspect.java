@@ -21,10 +21,10 @@ import java.util.Date;
  * @version 1.0.0
  * @date 2020/7/2 15:38
  */
-@Aspect
-@Order(value = Ordered.HIGHEST_PRECEDENCE)
-@Configuration
-@ConditionalOnWebApplication(type = ConditionalOnWebApplication.Type.SERVLET)
+//@Aspect
+//@Order(value = Ordered.HIGHEST_PRECEDENCE)
+//@Configuration
+//@ConditionalOnWebApplication(type = ConditionalOnWebApplication.Type.SERVLET)
 public class ControllerAspect {
 
     private AspectBeforeProcess beforeProcessCustomizer;

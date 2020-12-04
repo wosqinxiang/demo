@@ -1,6 +1,9 @@
 package com.ahdms.aop;
 
 import com.ahdms.aop.customizer.AspectCustomizerConfiguration;
+import com.ahdms.logger.ControllerAccessLogger;
+import com.ahdms.logger.DefaultControllerAccessLogger;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
@@ -12,5 +15,11 @@ import org.springframework.context.annotation.Import;
 @Import(AspectCustomizerConfiguration.class)
 @Configuration
 public class AspectAutoConfiguration {
+
+    @Bean
+    public ControllerAccessLogger controllerAccessLogger() {
+        return new DefaultControllerAccessLogger(true);
+    }
+
 
 }
