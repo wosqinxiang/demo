@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.ahdms.test</groupId>
+    <artifactId>imctest</artifactId>
+    <version>1.0-SNAPSHOT</version>
+
+    <parent>
+        <groupId>com.ahdms</groupId>
+        <artifactId>dms-framework-parent</artifactId>
+        <version>1.1.0-SNAPSHOT</version>
+        <relativePath/>
+    </parent>
+
+    <dependencies>
+        <dependency>
+            <artifactId>dms-framework-core</artifactId>
+            <exclusions>
+                <exclusion>
+                    <artifactId>spring-cloud-starter-consul-config</artifactId>
+                    <groupId>org.springframework.cloud</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>spring-cloud-starter-consul-discovery</artifactId>
+                    <groupId>org.springframework.cloud</groupId>
+                </exclusion>
+            </exclusions>
+            <groupId>com.ahdms</groupId>
+        </dependency>
+
+        <dependency>
+            <artifactId>dms-framework-mybatis</artifactId>
+            <groupId>com.ahdms</groupId>
+        </dependency>
+
+        <dependency>
+            <artifactId>dms-framework-swagger</artifactId>
+            <groupId>com.ahdms</groupId>
+        </dependency>
+
+    </dependencies>
+
+
+</project>

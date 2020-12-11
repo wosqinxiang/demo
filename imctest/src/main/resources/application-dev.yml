@@ -1,0 +1,7 @@
+spring:
+  datasource:
+    password: AHdms520
+    username: root
+    url: jdbc:mysql://172.16.1.180:3306/imc?serverTimezone=UTC&characterEncoding=utf-8
+
+
