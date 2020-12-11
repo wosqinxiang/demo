@@ -1,0 +1,3 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+  com.ahdms.framework.idgen.config.IdGeneratorRedisConfiguration,\
+  com.ahdms.framework.idgen.config.IdGeneratorAutoConfiguration

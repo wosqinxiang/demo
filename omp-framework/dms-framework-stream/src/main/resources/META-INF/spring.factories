@@ -1,0 +1,3 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+  com.ahdms.framework.stream.output.StreamOutputConfiguration,\
+  com.ahdms.framework.stream.StreamAutoConfiguration

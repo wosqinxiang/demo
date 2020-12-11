@@ -1,0 +1,17 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+  com.ahdms.framework.core.web.response.ResponseAutoConfiguration,\
+  com.ahdms.framework.core.exception.advice.ExceptionAdviceAutoConfiguration,\
+  com.ahdms.framework.core.env.EnvAutoConfiguration,\
+  com.ahdms.framework.core.alert.AlertAutoConfiguration,\
+  com.ahdms.framework.core.web.DmsServletConfiguration,\
+  com.ahdms.framework.core.web.DmsWebMvcConfigurer,\
+  com.ahdms.framework.core.boot.DmsBaseConfiguration,\
+  com.ahdms.framework.core.aspect.ControllerAspect,\
+  com.ahdms.framework.core.boot.DmsStartEventListener,\
+  com.ahdms.framework.core.boot.EncryptAutoConfiguration,\
+  com.ahdms.framework.core.logger.LoggerConfiguration,\
+  com.ahdms.framework.core.context.DmsContextAutoConfiguration,\
+  com.ahdms.framework.core.context.DmsServletConfiguration,\
+  com.ahdms.framework.core.aspect.AspectAutoConfiguration
+org.springframework.context.ApplicationContextInitializer=\
+  com.ahdms.framework.core.logger.LoggerInitializer

@@ -1,0 +1,3 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+  com.ahdms.framework.seata.DataSourceProxyConfig,\
+  com.ahdms.framework.seata.SeataConfiguration

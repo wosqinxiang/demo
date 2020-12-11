@@ -1,0 +1,4 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+  com.ahdms.framework.lock.LockAutoConfiguration,\
+  com.ahdms.framework.lock.DistributedLockerAspect,\
+  com.ahdms.framework.lock.RedissonAutoConfiguration

@@ -1,0 +1,4 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+  com.ahdms.framework.feign.DmsFeignAutoConfiguration,\
+  com.ahdms.framework.feign.ribbon.support.RibbonDiscoveryRuleAutoConfiguration,\
+  com.ahdms.framework.feign.http.RestTemplateConfiguration

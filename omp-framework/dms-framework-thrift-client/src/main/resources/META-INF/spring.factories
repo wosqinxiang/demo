@@ -1,0 +1,2 @@
+com.ahdms.framework.thrift.client.annotation.EnableThriftClient=\
+com.ahdms.framework.thrift.client.ThriftClientAutoConfiguration

@@ -1,0 +1,3 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+  com.ahdms.framework.session.config.SessionConfiguration,\
+  com.ahdms.framework.session.config.SessionRedisConfiguration

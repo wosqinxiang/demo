@@ -1,0 +1,152 @@
+<configuration>
+    <springProperty scope="context" name="appName" source="logging.appName" defaultValue="DEFAULT"/>
+    <springProperty scope="context" name="rootLevel" source="logging.level.root" defaultValue="INFO"/>
+    <springProperty scope="context" name="logDir" source="logging.dir" defaultValue="logs"/>
+    <property name="pattern" value ="%d %-5level [%-18.18thread] %-36logger{36} - [%X{x-request-id:-SYSTEM}]: %msg%n" />
+<!--    <springProperty scope="context" name="sqlLevel" source="lemon.sql.level" defaultValue="INFO"/>-->
+
+    <conversionRule conversionWord="color" converterClass="org.springframework.boot.logging.logback.ColorConverter" />
+
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%color(%d){faint} %color(%-5level) %color([%-18.18thread]){magenta} %color(%-36logger{36}){cyan} - %color([%X{requestId:-SYSTEM}]){faint}: %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${logDir}/${appName}.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <fileNamePattern>${logDir}/${appName}-%d{yyyyMMdd}.%i.log</fileNamePattern>
+            <maxFileSize>10MB</maxFileSize>
+        </rollingPolicy>
+        <encoder>
+            <pattern>%d %-5level [%-18.18thread] %-36logger{36} - [%X{x-request-id:-SYSTEM}]: %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <appender name ="FILE-ASYNC" class= "ch.qos.logback.classic.AsyncAppender">
+        <discardingThreshold>0</discardingThreshold>
+        <queueSize>10240</queueSize>
+        <appender-ref ref ="FILE"/>
+    </appender>
+
+    <appender name="ERROR-FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${logDir}/error-${appName}.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <fileNamePattern>${logDir}/error-${appName}-%d{yyyyMMdd}.%i.log</fileNamePattern>
+            <maxFileSize>10MB</maxFileSize>
+        </rollingPolicy>
+        <encoder>
+            <pattern>%d %-5level [%-18.18thread] %-36logger{36} - [%X{x-request-id:-SYSTEM}]: %msg%n</pattern>
+        </encoder>
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>ERROR</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+    </appender>
+
+    <appender name="FILE-CLIENT" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${logDir}/client-${appName}.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <fileNamePattern>${logDir}/client-${appName}-%d{yyyyMMdd}.%i.log</fileNamePattern>
+            <maxFileSize>10MB</maxFileSize>
+        </rollingPolicy>
+        <encoder>
+            <pattern>%d %-5level [%-18.18thread] - [%X{x-request-id:-SYSTEM}]: %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <appender name ="FILE-CLIENT-ASYNC" class= "ch.qos.logback.classic.AsyncAppender">
+        <discardingThreshold>0</discardingThreshold>
+        <queueSize>10240</queueSize>
+        <appender-ref ref ="FILE-CLIENT"/>
+    </appender>
+
+    <appender name="FILE-ACCESS" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${logDir}/access-${appName}.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <fileNamePattern>${logDir}/access-${appName}-%d{yyyyMMdd}.%i.log</fileNamePattern>
+            <maxFileSize>10MB</maxFileSize>
+        </rollingPolicy>
+        <encoder>
+            <pattern>%d %-5level [%-18.18thread] - [%X{x-request-id:-SYSTEM}]: %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <appender name ="FILE-ACCESS-ASYNC" class= "ch.qos.logback.classic.AsyncAppender">
+        <discardingThreshold>0</discardingThreshold>
+        <queueSize>10240</queueSize>
+        <appender-ref ref ="FILE-ACCESS"/>
+    </appender>
+
+    <appender name="FILE-STREAM-CONSUMER" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${logDir}/stream-consumer-${appName}.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <fileNamePattern>${logDir}/stream-consumer-${appName}-%d{yyyyMMdd}.%i.log</fileNamePattern>
+            <maxFileSize>10MB</maxFileSize>
+        </rollingPolicy>
+        <encoder>
+            <pattern>%d %-5level [%-18.18thread] - [%X{x-request-id:-SYSTEM}]: %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <appender name ="FILE-STREAM-CONSUMER-ASYNC" class= "ch.qos.logback.classic.AsyncAppender">
+        <discardingThreshold>0</discardingThreshold>
+        <queueSize>10240</queueSize>
+        <appender-ref ref ="FILE-STREAM-CONSUMER"/>
+    </appender>
+
+    <appender name="FILE-STREAM-PRODUCER" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${logDir}/stream-producer-${appName}.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <fileNamePattern>${logDir}/stream-producer-${appName}-%d{yyyyMMdd}.%i.log</fileNamePattern>
+            <maxFileSize>10MB</maxFileSize>
+        </rollingPolicy>
+        <encoder>
+            <pattern>%d %-5level [%-18.18thread] - [%X{x-request-id:-SYSTEM}]: %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <appender name ="FILE-STREAM-PRODUCER-ASYNC" class= "ch.qos.logback.classic.AsyncAppender">
+        <discardingThreshold>0</discardingThreshold>
+        <queueSize>10240</queueSize>
+        <appender-ref ref ="FILE-STREAM-PRODUCER"/>
+    </appender>
+
+    <logger name="com.ahdms.framework.feign" level="INFO" additivity="false">
+        <appender-ref ref="FILE-CLIENT-ASYNC"/>
+    </logger>
+
+    <logger name="com.netflix.loadbalancer.LoadBalancerContext" level="DEBUG" additivity="false">
+        <appender-ref ref="FILE-CLIENT-ASYNC"/>
+    </logger>
+
+    <logger name="com.ahdms.framework.http.log.Slf4jLogger" level="INFO" additivity="false">
+        <appender-ref ref="FILE-CLIENT-ASYNC"/>
+    </logger>
+
+    <logger name="com.ahdms.framework.core.logger.DefaultControllerAccessLogger" level="INFO" additivity="false">
+        <appender-ref ref="FILE-ACCESS-ASYNC"/>
+    </logger>
+
+
+    <logger name="com.ahdms.framework.stream.logger.DefaultInputLogger" level="INFO" additivity="false">
+        <appender-ref ref="FILE-STREAM-CONSUMER-ASYNC"/>
+    </logger>
+
+
+    <logger name="com.ahdms.framework.stream.logger.DefaultOutputLogger" level="INFO" additivity="false">
+        <appender-ref ref="FILE-STREAM-PRODUCER-ASYNC"/>
+    </logger>
+
+    <root level="${rootLevel}">
+        <springProfile name="dev, test, pre, prod">
+            <appender-ref ref="FILE-ASYNC"/>
+            <appender-ref ref="ERROR-FILE"/>
+        </springProfile>
+        <springProfile name="dev">
+            <appender-ref ref="STDOUT"/>
+        </springProfile>
+    </root>
+</configuration>

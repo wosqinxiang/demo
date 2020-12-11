@@ -1,0 +1,6 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+  com.ahdms.framework.cache.autoconfig.RedisCacheAutoConfigure,\
+  com.ahdms.framework.cache.autoconfig.DmsCachingConfigurer,\
+  com.ahdms.framework.cache.autoconfig.CaffeineCacheAutoConfigure,\
+  com.ahdms.framework.cache.client.RedisOpsClient,\
+  com.ahdms.framework.cache.autoconfig.RedisTemplateAutoConfigure
