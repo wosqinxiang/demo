@@ -15,10 +15,10 @@ public class ImcStandardExtMenu {
     @TableId
     private Integer id;
 
-    private String extKey;
-    private String name;
+    private String itemKey;
+    private String itemName;
     private String oid;
     private Integer hasChild;
     private Integer parentId;
-    private Integer isCritical;
+    private Integer criticalItem;
 }

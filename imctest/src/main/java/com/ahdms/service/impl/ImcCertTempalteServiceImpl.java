@@ -1,9 +1,6 @@
 package com.ahdms.service.impl;
 
-import com.ahdms.bean.CertTemplateReqVo;
-import com.ahdms.bean.CertTemplateRspVo;
-import com.ahdms.bean.CustomerExtReqVo;
-import com.ahdms.bean.StandardExtReqVo;
+import com.ahdms.bean.*;
 import com.ahdms.dao.IImcCertTemplateMapper;
 import com.ahdms.dao.IImcTempalteExtensionChooseMapper;
 import com.ahdms.framework.core.commom.util.BeanUtils;
@@ -12,7 +9,10 @@ import com.ahdms.framework.core.commom.util.StringUtils;
 import com.ahdms.model.ImcCertTemplate;
 import com.ahdms.model.ImcTempalteExtensionChoose;
 import com.ahdms.service.IImcCertDnService;
+import com.ahdms.service.IImcCertExtService;
 import com.ahdms.service.IImcCertTempalteService;
+import com.ahdms.service.IImcStandardExtMenuService;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -36,6 +36,12 @@ public class ImcCertTempalteServiceImpl implements IImcCertTempalteService {
     @Autowired
     private IImcCertDnService certDnService;
 
+    @Autowired
+    private IImcCertExtService certExtService;
+
+    @Autowired
+    private IImcStandardExtMenuService standardExtMenuService;
+
     @Override
     public void addTemplate(CertTemplateReqVo certTemplateReqVo) {
         String templateId = UUID.randomUUID().toString().replace("-","");
@@ -50,7 +56,7 @@ public class ImcCertTempalteServiceImpl implements IImcCertTempalteService {
                 ImcTempalteExtensionChoose choose = new ImcTempalteExtensionChoose();
                 choose.setTemplateId(templateId);
                 choose.setExtType(1);
-                choose.setExtKey(standardExtReqVo.getExtKey());
+                choose.setExtKey(standardExtReqVo.getItemKey());
                 choose.setCriticalValue(standardExtReqVo.getCriticalValue());
                 choose.setChildValues(standardExtReqVo.getChildValues());
                 tempalteExtensionChooses.add(choose);
@@ -79,22 +85,19 @@ public class ImcCertTempalteServiceImpl implements IImcCertTempalteService {
 
     @Override
     public CertTemplateRspVo info(String templateId) {
-        ImcCertTemplate certTemplate = certTemplateMapper.selectByBId(templateId);
+        ImcCertTemplate certTemplate = certTemplateMapper.selectOne(new LambdaQueryWrapper<ImcCertTemplate>().eq(ImcCertTemplate::getTemplateId,templateId));
         CertTemplateRspVo certTemplateRspVo = BeanUtils.copy(certTemplate, CertTemplateRspVo.class);
 
         String dnIds = certTemplate.getDnIds();
         certTemplateRspVo.setDnIds(certDnService.getDnRsp(dnIds));
 
         if(0 == certTemplate.getCustomerExt()){
-
+            certTemplateRspVo.setCustomerExts(certExtService.getCustomerExts(templateId));
         }
         if(0 == certTemplate.getStandardExt()){
-
+            certTemplateRspVo.setStandardExts(standardExtMenuService.getStandardExt(templateId));
         }
         return certTemplateRspVo;
     }
 
-    private void setDns(){
-
-    }
 }

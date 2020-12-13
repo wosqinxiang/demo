@@ -1,6 +1,8 @@
 package com.ahdms.service;
 
 import com.ahdms.bean.CertExtensionRspVo;
+import com.ahdms.bean.CustomerExtRspVo;
+import com.ahdms.bean.StandardExtMenu;
 
 import java.util.List;
 
@@ -10,4 +12,6 @@ import java.util.List;
  */
 public interface IImcCertExtService {
     List<CertExtensionRspVo> listMenu();
+
+    List<CustomerExtRspVo> getCustomerExts(String templateId);
 }

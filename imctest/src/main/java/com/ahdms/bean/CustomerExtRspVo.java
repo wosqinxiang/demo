@@ -1,5 +1,6 @@
 package com.ahdms.bean;
 
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 /**
@@ -9,9 +10,10 @@ import lombok.Data;
 @Data
 public class CustomerExtRspVo {
 
+    @ApiModelProperty("选项Id")
     private Integer id;
     private String extKey;
-    private String name;
+    private String itemName;
     private Integer criticalValue;
     private Integer clientValue;
     private Integer isServer;

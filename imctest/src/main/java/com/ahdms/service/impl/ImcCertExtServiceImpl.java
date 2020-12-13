@@ -1,9 +1,14 @@
 package com.ahdms.service.impl;
 
 import com.ahdms.bean.CertExtensionRspVo;
+import com.ahdms.bean.CustomerExtRspVo;
+import com.ahdms.bean.StandardExtMenu;
 import com.ahdms.dao.IImcCertExtensionMapper;
+import com.ahdms.dao.IImcTempalteExtensionChooseMapper;
 import com.ahdms.model.ImcCertExtension;
+import com.ahdms.model.ImcTempalteExtensionChoose;
 import com.ahdms.service.IImcCertExtService;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +24,9 @@ public class ImcCertExtServiceImpl implements IImcCertExtService {
 
     @Autowired
     private IImcCertExtensionMapper certExtensionMapper;
+
+    @Autowired
+    private IImcTempalteExtensionChooseMapper tempalteExtensionChooseMapper;
 
     @Override
     public List<CertExtensionRspVo> listMenu() {
@@ -38,4 +46,13 @@ public class ImcCertExtServiceImpl implements IImcCertExtService {
         return result;
     }
 
+    @Override
+    public List<CustomerExtRspVo> getCustomerExts(String templateId) {
+        List<ImcTempalteExtensionChoose> customerExtChooses = tempalteExtensionChooseMapper.selectList(
+                new LambdaQueryWrapper<ImcTempalteExtensionChoose>()
+                        .eq(ImcTempalteExtensionChoose::getTemplateId, templateId)
+                        .eq(ImcTempalteExtensionChoose::getExtType, 2));
+
+        return null;
+    }
 }

@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -31,6 +32,7 @@ public class ImcCertDnServiceImpl implements IImcCertDnService {
             certDnRspVo.setValue(imcCertDn.getName() + "=" + s);
             certDnRspVo.setIsChoose(imcCertDn.getIsRequired());
             certDnRspVo.setIsRequired(imcCertDn.getIsRequired());
+            certDnRspVo.setId(imcCertDn.getId());
             certDnRspVos.add(certDnRspVo);
         });
         return certDnRspVos;
@@ -40,7 +42,15 @@ public class ImcCertDnServiceImpl implements IImcCertDnService {
     public List<CertDnRspVo> getDnRsp(String dnIds) {
         String[] dnIdArr = StringUtils.split(dnIds,",");
         List<CertDnRspVo> list = list();
-//        list.stream().
+        list.stream().forEach(certDn -> {
+            if(contain(dnIdArr,String.valueOf(certDn.getId()))){
+                certDn.setIsChoose(0);
+            }
+        });
         return list;
+    }
+
+    private boolean contain(String[] arr,String id){
+        return Arrays.stream(arr).anyMatch(id::equals);
     }
 }

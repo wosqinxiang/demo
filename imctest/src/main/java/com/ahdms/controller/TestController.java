@@ -32,7 +32,7 @@ public class TestController {
     private IImcCertTempalteService certTempalteService;
 
     @GetMapping("standardExt/list/menu")
-    public List<StandardExtMenu> standardExtListMenu(){
+    public List<StandardExtRspVo> standardExtListMenu(){
         return standardExtMenuService.listMenu();
     }
 
