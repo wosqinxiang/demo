@@ -1,0 +1,24 @@
+server:
+  port: 9018
+
+svs:
+  appCodes:
+    test1:
+      ip: 172.16.1.9
+      port: 9000
+      keyIndex: 3
+      keyValue: dms123456
+      serialNumber: 00fed76f47bbbf61a4f8f53f59ba
+    test2:
+      ip: 172.16.1.9
+      port: 9000
+      keyIndex: 2
+      keyValue: dms123456
+      serialNumber: dddd
+
+
+
+
+spring:
+  main:
+    allow-bean-definition-overriding: true

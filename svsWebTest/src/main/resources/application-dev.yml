@@ -1,0 +1,12 @@
+#spring:
+#  datasource:
+#    password: AHdms520
+#    username: root
+#    url: jdbc:mysql://172.16.1.180:3306/imc?serverTimezone=UTC&characterEncoding=utf-8
+#server:
+##  port: 9018
+##
+##svs:
+##  server:
+##    ip: 172.16.1.9
+##    port: 9000
