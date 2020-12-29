@@ -13,8 +13,6 @@ import javax.validation.constraints.NotNull;
 public class DecryptEnvelopeReqVo {
 
     @NotNull
-    private String appCode;
-    @NotNull
     private String base64EnvelopeData;
 
 }

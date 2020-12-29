@@ -10,7 +10,7 @@ import com.ahdms.bean.rsp.TwaSvrSignRspVo;
 public interface ISvsClientService {
     String signData(SignDataReqVo signDataReqVo) throws Exception;
 
-    String svrGenRnd() throws Exception;
+    String svrGenRnd(Integer length) throws Exception;
 
     boolean owaSvrVerify(OwaSvrVerifyReqVo verifyReqVo) throws Exception;
 
@@ -28,15 +28,15 @@ public interface ISvsClientService {
 
     String decryptEnvelope(DecryptEnvelopeReqVo decryptEnvelopeReqVo) throws Exception;
 
-    String certInfo(String certSerialNumber) throws Exception;
+    String certInfo() throws Exception;
 
     Boolean verifyCert(String certBase64Str) throws Exception;
 
     String genRandomSignData(GenRandomSignDataReqVo reqVo) throws Exception;
 
-    String encryptData(EncryptDataReqVo reqVo);
+    String encryptData(EncryptDataReqVo reqVo) throws Exception;
 
-    String decryptData(EncryptDataReqVo reqVo);
+    String decryptData(EncryptDataReqVo reqVo) throws Exception;
 
     String genEncryptKey() throws Exception;
 }

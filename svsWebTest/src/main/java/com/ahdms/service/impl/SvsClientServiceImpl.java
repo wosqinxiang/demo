@@ -24,12 +24,9 @@ public class SvsClientServiceImpl implements ISvsClientService {
     @Autowired
     private SvsToolUtils svsToolUtils;
 
-    @Autowired
-    private SvsProperties svsProperties;
-
     @Override
     public String signData(SignDataReqVo signDataReqVo) throws Exception {
-        SvsProperties.SvsServer svsServer = svsProperties.getAppCodes().get(SvsContextUtils.getAccount());
+        SvsProperties.SvsServer svsServer = SvsContextUtils.getSvsServer();
 
         byte[] signData = svsToolUtils.getSVTool(SvsContextUtils.getAccount()).SVS_SignData(svsServer.getKeyIndex(), svsServer.getKeyValue(), signDataReqVo.getInData().getBytes());
 
@@ -44,15 +41,15 @@ public class SvsClientServiceImpl implements ISvsClientService {
         //获取签名值byte[]
         byte[] signatureBytes = Base64Utils.decodeString(verifyDataReqVo.getBase64SignValue());
 
-        boolean result = svsToolUtils.getDefaultSVTool().SVS_VerifyData(cert, verifyDataReqVo.getInData().getBytes(), signatureBytes, verifyDataReqVo.getVerifyLevel());
+        boolean result = svsToolUtils.getSVTool(SvsContextUtils.getAccount()).SVS_VerifyData(cert, verifyDataReqVo.getInData().getBytes(), signatureBytes, verifyDataReqVo.getVerifyLevel());
         return result;
 
     }
 
     @Override
     public String pkcs7SignData(Pkcs7SignDataReqVo signDataReqVo) throws Exception {
-        SvsProperties.SvsServer svsServer = svsProperties.getAppCodes().get(SvsContextUtils.getAccount());
-        byte[] bytes = svsToolUtils.getSVTool(signDataReqVo.getAppCode()).SVS_PKCS7SignData(svsServer.getKeyIndex(), svsServer.getKeyValue(), signDataReqVo.getInData().getBytes(), signDataReqVo.getOriginalText() == 0, signDataReqVo.getIrls() == 0);
+        SvsProperties.SvsServer svsServer = SvsContextUtils.getSvsServer();
+        byte[] bytes = svsToolUtils.getSVTool(SvsContextUtils.getAccount()).SVS_PKCS7SignData(svsServer.getKeyIndex(), svsServer.getKeyValue(), signDataReqVo.getInData().getBytes(), signDataReqVo.getOriginalText() == 0, signDataReqVo.getIrls() == 0);
         return Base64Utils.encodeToString(bytes);
 
     }
@@ -60,7 +57,7 @@ public class SvsClientServiceImpl implements ISvsClientService {
 
     @Override
     public boolean pkcs7VerifyData(Pkcs7VerifyDataReqVo verifyDataReqVo) throws Exception {
-        return svsToolUtils.getDefaultSVTool().SVS_PKCS7VerifyData(verifyDataReqVo.getOriginalText() == 0, verifyDataReqVo.getIrls() == 0, verifyDataReqVo.getInData().getBytes(), Base64Utils.decodeString(verifyDataReqVo.getBase64Pkcs7SignData()));
+        return svsToolUtils.getSVTool(SvsContextUtils.getAccount()).SVS_PKCS7VerifyData(verifyDataReqVo.getOriginalText() == 0, verifyDataReqVo.getIrls() == 0, verifyDataReqVo.getInData().getBytes(), Base64Utils.decodeString(verifyDataReqVo.getBase64Pkcs7SignData()));
 
     }
 
@@ -71,15 +68,15 @@ public class SvsClientServiceImpl implements ISvsClientService {
 
         //获取可信标识
         Certificate cert = Certificate.getInstance(Base64Utils.decodeString(encryptEnvelopeReqVo.getBase64EncodeCert()));
-        byte[] bytes = svsToolUtils.getDefaultSVTool().SVS_EncryptEnvelope(cert, encryptEnvelopeReqVo.getInData().getBytes());
+        byte[] bytes = svsToolUtils.getSVTool(SvsContextUtils.getAccount()).SVS_EncryptEnvelope(cert, encryptEnvelopeReqVo.getInData().getBytes());
         return Base64Utils.encodeToString(bytes);
 
     }
 
     @Override
     public String decryptEnvelope(DecryptEnvelopeReqVo decryptEnvelopeReqVo) throws Exception {
-        SvsProperties.SvsServer svsServer = svsProperties.getAppCodes().get(SvsContextUtils.getAccount());
-        return new String(svsToolUtils.getSVTool(decryptEnvelopeReqVo.getAppCode()).SVS_DecryptEnvelope(
+        SvsProperties.SvsServer svsServer = SvsContextUtils.getSvsServer();
+        return new String(svsToolUtils.getSVTool(SvsContextUtils.getAccount()).SVS_DecryptEnvelope(
                 Base64Utils.decodeString(decryptEnvelopeReqVo.getBase64EnvelopeData())
                 , svsServer.getKeyIndex(), svsServer.getKeyValue()));
 
@@ -87,27 +84,37 @@ public class SvsClientServiceImpl implements ISvsClientService {
 
     @Override
     public String genEncryptKey() throws Exception {
-        String base64EncodeCert = certInfo(SvsContextUtils.getAccount());
+        String base64EncodeCert = certInfo();
         Certificate cert = Certificate.getInstance(Base64Utils.decodeString(base64EncodeCert));
         byte[] bytes = svsToolUtils.getSVTool(SvsContextUtils.getAccount()).SVS_GetCTIDEncryptKey(cert);
         return Base64Utils.encodeToString(bytes);
     }
 
     @Override
-    public String encryptData(EncryptDataReqVo reqVo) {
-//        svsToolUtils.getDefaultSVTool().SVS_EncryptCTID(null,)
-        return null;
+    public String encryptData(EncryptDataReqVo reqVo) throws Exception{
+        SvsProperties.SvsServer svsServer = SvsContextUtils.getSvsServer();
+        byte[] encryptKey = Base64Utils.decodeString(svsServer.getEncryptKey());
+        byte[] inData = concat(reqVo.getInData().getBytes());
+        byte[] bytes = svsToolUtils.getSVTool(SvsContextUtils.getAccount())
+                .SVS_EncryptCTID(encryptKey, svsServer.getKeyIndex(),svsServer.getKeyValue(), inData);
+        return Base64Utils.encodeToString(bytes);
     }
 
     @Override
-    public String decryptData(EncryptDataReqVo reqVo) {
-//        svsToolUtils.getDefaultSVTool().SVS_DecryptCTID();
-        return null;
+    public String decryptData(EncryptDataReqVo reqVo) throws Exception{
+        SvsProperties.SvsServer svsServer = SvsContextUtils.getSvsServer();
+        byte[] bytes = svsToolUtils.getSVTool(SvsContextUtils.getAccount())
+                .SVS_DecryptCTID(svsServer.getKeyIndex(), svsServer.getKeyValue()
+                        , Base64Utils.decodeString(svsServer.getEncryptKey())
+                        , Base64Utils.decodeString(reqVo.getInData()));
+        return new String(bytes).trim();
     }
 
     @Override
-    public String svrGenRnd() throws Exception {
-        byte[] randomBytes = svsToolUtils.getSVTool(SvsContextUtils.getAccount()).SVS_GenerateRandom(16);
+    public String svrGenRnd(Integer length) throws Exception {
+        length = length == null ? 16 : length;
+
+        byte[] randomBytes = svsToolUtils.getSVTool(SvsContextUtils.getAccount()).SVS_GenerateRandom(length);
 
         return Util.byteToHex(randomBytes);
     }
@@ -124,22 +131,23 @@ public class SvsClientServiceImpl implements ISvsClientService {
         byte[] inData = Util.mergeBytes(Util.hexToByte(verifyReqVo.getServerRandom()), Util.hexToByte(verifyReqVo.getClientRandom()));
 
         //验证签名值
-        return svsToolUtils.getDefaultSVTool().SVS_VerifyData(cert, inData, signatureBytes, verifyReqVo.getVerifyLevel());
+        return svsToolUtils.getSVTool(SvsContextUtils.getAccount()).SVS_VerifyData(cert, inData, signatureBytes, verifyReqVo.getVerifyLevel());
 
     }
 
     @Override
     public TwaSvrSignRspVo twaSvrSign(TwaSvrSignReqVo svrSignReqVo) throws Exception {
+        SvsProperties.SvsServer svsServer = SvsContextUtils.getSvsServer();
         TwaSvrSignRspVo result = null;
 
         //生成随机数R1
-        String R1 = svrGenRnd();
+        String R1 = svrGenRnd(16);
 
         //组装签名原文
         byte[] inData = Util.mergeBytes(Util.hexToByte(R1), Util.hexToByte(svrSignReqVo.getClientRandom()));
 
         //数字签名
-        byte[] signatureBytes = svsToolUtils.getDefaultSVTool().SVS_SignData(svrSignReqVo.getKeyIndex(), svrSignReqVo.getKeyValue(), inData);
+        byte[] signatureBytes = svsToolUtils.getSVTool(SvsContextUtils.getAccount()).SVS_SignData(svsServer.getKeyIndex(), svsServer.getKeyValue(), inData);
 
         if (null != signatureBytes) {
             result = new TwaSvrSignRspVo();
@@ -164,13 +172,13 @@ public class SvsClientServiceImpl implements ISvsClientService {
         inData = Util.mergeBytes(inData, identity.getBytes());
 
         //验证签名值
-        return svsToolUtils.getDefaultSVTool().SVS_VerifyData(cert, inData, signatureBytes, svrVerifyReqVo.getVerifyLevel());
+        return svsToolUtils.getSVTool(SvsContextUtils.getAccount()).SVS_VerifyData(cert, inData, signatureBytes, svrVerifyReqVo.getVerifyLevel());
     }
 
     @Override
-    public String certInfo(String appCode) throws Exception {
-        SvsProperties.SvsServer svsServer = svsProperties.getAppCodes().get(appCode);
-        Certificate certificate = svsToolUtils.getSVTool(appCode).SVS_GetCertInfo(svsServer.getSerialNumber());
+    public String certInfo() throws Exception {
+        SvsProperties.SvsServer svsServer = SvsContextUtils.getSvsServer();
+        Certificate certificate = svsToolUtils.getSVTool(SvsContextUtils.getAccount()).SVS_GetCertInfo(svsServer.getSerialNumber());
         return Base64Utils.encodeToString(certificate.getEncoded());
 
     }
@@ -179,21 +187,30 @@ public class SvsClientServiceImpl implements ISvsClientService {
     public Boolean verifyCert(String certBase64Str) throws Exception {
         Certificate cert = Certificate.getInstance(Base64Utils.decodeString(certBase64Str));
 
-        boolean b = svsToolUtils.getDefaultSVTool().SVS_VerifyCert(cert);
+        boolean b = svsToolUtils.getSVTool(SvsContextUtils.getAccount()).SVS_VerifyCert(cert);
         return b;
 
     }
 
     @Override
     public String genRandomSignData(GenRandomSignDataReqVo reqVo) throws Exception {
+        SvsProperties.SvsServer svsServer = SvsContextUtils.getSvsServer();
         byte[] inData = Util.mergeBytes(Util.hexToByte(reqVo.getServerRandom()), Util.hexToByte(reqVo.getClientRandom()));
         if(StringUtils.isNotBlank(reqVo.getIdentity())){
             inData = Util.mergeBytes(inData, reqVo.getIdentity().getBytes());
         }
-        byte[] signData = svsToolUtils.getDefaultSVTool().SVS_SignData(reqVo.getKeyIndex(), reqVo.getKeyValue(), inData);
+        byte[] signData = svsToolUtils.getSVTool(SvsContextUtils.getAccount()).SVS_SignData(svsServer.getKeyIndex(), svsServer.getKeyValue(), inData);
 
         return Base64Utils.encodeToString(signData);
     }
+
+    private byte[] concat(byte[] inData){
+        int i = inData.length % 16;
+        byte[] b = new byte[inData.length + 16 -i];
+        System.arraycopy(inData,0,b,0,inData.length);
+        return b;
+    }
+
 
     private String getPartFromDN(String dn, String dnpart) {
         String part = null;

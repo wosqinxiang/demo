@@ -17,6 +17,7 @@ public enum ApiCode {
     CORE_CERT_SERIAL_ERROR("CORE10004","可信标识序列号有误"),
     CORE_GEN_RANDOM_ERROR("CORE10005","产生随机数失败"),
     CORE_BASE64_DECODE_ERROR("CORE10006","Base64解码出错"),
+    CORE_ACCOUNT_ERROR("CORE10007","服务账号有误"),
 
     SIGN_SIGN_DATA_ERROR("SIGN10001","签名失败"),
     SIGN_DATA_ENCODE_ERROR("SIGN10002","签名值编码错误"),
@@ -38,7 +39,8 @@ public enum ApiCode {
     ENC_ENCRYPT_DATA_ERROR("ENC10001","数字信封加密失败"),
     ENC_ENVELOPE_ENCODE_ERROR("ENC10002","数字信封编码格式错误"),
     ENC_DECRYPT_DATA_ERROR("ENC10003","数字信封解密失败"),
-
+    ENCRYPT_DATA_ERROR("ENC10004","加密失败"),
+    DECRYPT_DATA_ERROR("ENC10005","解密失败"),
     ;
 
     private String code;

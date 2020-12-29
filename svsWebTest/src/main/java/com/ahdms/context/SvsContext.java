@@ -1,5 +1,6 @@
 package com.ahdms.context;
 
+import com.ahdms.config.svs.SvsProperties;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
@@ -14,5 +15,7 @@ import lombok.ToString;
 public class SvsContext {
 
     private String account;
+
+    private SvsProperties.SvsServer svsServer;
 
 }

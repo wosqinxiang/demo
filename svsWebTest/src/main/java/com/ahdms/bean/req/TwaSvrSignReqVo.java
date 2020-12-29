@@ -12,10 +12,6 @@ import javax.validation.constraints.NotNull;
 @Data
 public class TwaSvrSignReqVo {
 
-    @Min(value = 1,message = "签名私钥索引值错误")
-    private int keyIndex;
-    @NotNull
-    private String keyValue;
     @NotNull
     private String clientRandom;
 }

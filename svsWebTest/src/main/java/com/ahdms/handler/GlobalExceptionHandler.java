@@ -92,6 +92,13 @@ public class GlobalExceptionHandler {
         if(e instanceof SVS_DecryptEnvelopeException){
             return ApiResult.error(ENC_DECRYPT_DATA_ERROR);
         }
+        if(e instanceof SVS_EncryptBytesException){
+            return ApiResult.error(ENCRYPT_DATA_ERROR);
+        }
+        if(e instanceof SVS_DecryptBytesException){
+            return ApiResult.error(DECRYPT_DATA_ERROR);
+        }
+
         if(e instanceof Base64Exception){
             return ApiResult.error(CORE_BASE64_DECODE_ERROR);
         }

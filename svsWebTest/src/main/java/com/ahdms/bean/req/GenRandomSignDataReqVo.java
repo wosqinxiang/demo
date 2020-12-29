@@ -19,9 +19,5 @@ public class GenRandomSignDataReqVo {
     private String clientRandom;
     @ApiModelProperty(value = "模拟双向认证客户端签名时需要传入")
     private String identity;
-    @Min(value = 1,message = "签名私钥索引值错误")
-    private int keyIndex;
-    @NotNull
-    private String keyValue;
 
 }

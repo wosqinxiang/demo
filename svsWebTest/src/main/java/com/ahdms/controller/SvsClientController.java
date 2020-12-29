@@ -92,8 +92,8 @@ public class SvsClientController {
 
     @PostMapping("/svrGenRnd")
     @ApiOperation(value = "生产随机数")
-    public ApiResult<String> genRandom() throws Exception {
-        String signData = svsClientService.svrGenRnd();
+    public ApiResult<String> genRandom(@RequestBody SvrGenRndReqVo reqVo) throws Exception {
+        String signData = svsClientService.svrGenRnd(reqVo.getLength());
         return ApiResult.success(signData);
     }
 
@@ -120,8 +120,8 @@ public class SvsClientController {
 
     @PostMapping("/certInfo")
     @ApiOperation(value = "获取可信标识信息接口", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ApiResult<String> certInfo(@RequestBody @Validated @NotNull CertInfoReqVo reqVo) throws Exception {
-        String result = svsClientService.certInfo(reqVo.getAppCode());
+    public ApiResult<String> certInfo() throws Exception {
+        String result = svsClientService.certInfo();
         return ApiResult.success(result);
     }
 

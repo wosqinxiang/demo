@@ -1,24 +1,23 @@
 server:
-  port: 9018
+  port: 9019
 
 svs:
+  accounts: test1,test2
   appCodes:
     test1:
       ip: 172.16.1.9
       port: 9000
-      keyIndex: 3
+      keyIndex: 2
       keyValue: dms123456
-      serialNumber: 00fed76f47bbbf61a4f8f53f59ba
+      serialNumber: 00fed76e82ba2918c615d06d220d
+      encryptKey: EA7C339yWbCIJwQUfh58SMLzxDvXhHiQk3UFIHx2+LoAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAJHhj3FDdnpKTmlEfR2njfGGhbKaY536/2hnG4LJXkz2AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADOAJzXrdGSE4esI4UYdHwIp5kUE4ohxQzokzpUzzD6qBAAAACgdO2Tqum36gjFx3FZUZBB
     test2:
       ip: 172.16.1.9
       port: 9000
       keyIndex: 2
       keyValue: dms123456
-      serialNumber: dddd
-
-
-
-
+      serialNumber: 00fed76e82ba2918c615d06d220d
+      encryptKey: c+6R7LeL+Lp8cLFfoS7nm+Aw9zAnEbbHqF99O2VdgEgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAALwZe+A22yxzqQtlYcQgz80zPR9k/PiUKH+/KLDCuOY6AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADhskRLfpkRiw3txmU71Qi8xatBiXhspBquJ+WzKQ2KFxAAAADfL2I7zxELGtmFpi9HIKbD
 spring:
   main:
     allow-bean-definition-overriding: true
