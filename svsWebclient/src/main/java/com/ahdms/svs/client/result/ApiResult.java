@@ -1,5 +1,6 @@
 package com.ahdms.svs.client.result;
 
+import com.ahdms.svs.client.constants.ApiCode;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -23,5 +24,9 @@ public class ApiResult<T> {
 
     public static <T> ApiResult<T> success(T data){
         return new ApiResult<>("0","",data);
+    }
+
+    public static <T> ApiResult<T> error(ApiCode apiCode){
+        return new ApiResult<>(apiCode.getCode(),apiCode.getMessage(),null);
     }
 }

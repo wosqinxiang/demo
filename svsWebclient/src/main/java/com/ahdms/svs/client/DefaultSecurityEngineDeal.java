@@ -10,21 +10,12 @@ import java.util.Map;
 
 /**
  * @author qinxiang
- * @date 2020-12-24 14:42
+ * @date 2020-12-28 11:37
  */
-public class SvsServiceClient {
+public class DefaultSecurityEngineDeal extends SecurityEngineDeal{
 
-    private String account;
-
-    private String serverUrl;
-
-    private SvsServiceClient(String account,String serverUrl){
-        this.account = account;
-        this.serverUrl = serverUrl;
-    }
-
-    public static SvsServiceClient getInstance(String account,String serverUrl){
-        return new SvsServiceClient(account,serverUrl);
+    public DefaultSecurityEngineDeal(String account,String serverUrl){
+        super(account,serverUrl);
     }
 
     /**
@@ -32,10 +23,11 @@ public class SvsServiceClient {
      * @param inData 待签名原文
      * @return Base64编码的签名值
      */
+    @Override
     public ApiResult<String> signData(String inData){
         Map<String,String> params = new HashMap<>();
         params.put("inData",inData);
-        ApiResult apiResult = HttpExecuteUtils.execute(this.serverUrl,SvsServerUrlConfig.SIGN_DATA_PATH,params,this.account);
+        ApiResult apiResult = HttpExecuteUtils.execute(this.serverUrl, SvsServerUrlConfig.SIGN_DATA_PATH,params,this.account);
         return apiResult;
     }
 
@@ -47,6 +39,7 @@ public class SvsServiceClient {
      * @param verifyLevel 可信标识验证级别(默认值为0)
      * @return
      */
+    @Override
     public ApiResult<Boolean> verifyData(String base64EncodeCert,String base64SignValue,String inData,int verifyLevel){
         Map<String,Object> params = new HashMap<>();
         params.put("base64EncodeCert",base64EncodeCert);
@@ -64,6 +57,7 @@ public class SvsServiceClient {
      * @param irls 签名值是否附加撤销列表(0.是，1.否)
      * @return
      */
+    @Override
     public ApiResult<String> pkcs7SignData(String inData,int originalText,int irls){
         Map<String,Object> params = new HashMap<>();
         params.put("originalText",originalText);
@@ -81,6 +75,7 @@ public class SvsServiceClient {
      * @param irls 签名值是否附加撤销列表(0.是，1.否)
      * @return
      */
+    @Override
     public ApiResult<Boolean> pkcs7VerifyData(String base64Pkcs7SignData,String inData,int originalText,int irls){
         Map<String,Object> params = new HashMap<>();
         params.put("base64Pkcs7SignData",base64Pkcs7SignData);
@@ -97,6 +92,7 @@ public class SvsServiceClient {
      * @param inData 待加密的原文数据
      * @return 加密后的密文(base64编码后的)
      */
+    @Override
     public ApiResult<String> encryptEnvelope(String base64EncodeCert,String inData){
         Map<String,Object> params = new HashMap<>();
         params.put("base64EncodeCert",base64EncodeCert);
@@ -110,6 +106,7 @@ public class SvsServiceClient {
      * @param base64EnvelopeData 加密后的密文(base64编码后的)
      * @return
      */
+    @Override
     public ApiResult<String> decryptEnvelope(String base64EnvelopeData){
         Map<String,Object> params = new HashMap<>();
         params.put("base64EnvelopeData",base64EnvelopeData);
@@ -122,6 +119,7 @@ public class SvsServiceClient {
      * @param inData 待加密原文数据
      * @return
      */
+    @Override
     public ApiResult<String> encryptData(String inData){
         Map<String,Object> params = new HashMap<>();
         params.put("inData",inData);
@@ -134,6 +132,7 @@ public class SvsServiceClient {
      * @param inData 待解密数据
      * @return
      */
+    @Override
     public ApiResult<String> decryptData(String inData){
         Map<String,Object> params = new HashMap<>();
         params.put("inData",inData);
@@ -145,6 +144,7 @@ public class SvsServiceClient {
      * 获取可信标识信息接口
      * @return
      */
+    @Override
     public ApiResult<String> certInfo(){
         Map<String,Object> params = new HashMap<>();
         ApiResult<String> apiResult = HttpExecuteUtils.execute(this.serverUrl,SvsServerUrlConfig.CERT_INFO_PATH,params,this.account);
@@ -155,8 +155,10 @@ public class SvsServiceClient {
      * 生产服务端随机数
      * @return
      */
-    public ApiResult<String> svrGenRnd(){
+    @Override
+    public ApiResult<String> svrGenRnd(int length){
         Map<String,Object> params = new HashMap<>();
+        params.put("length",length);
         ApiResult<String> apiResult = HttpExecuteUtils.execute(this.serverUrl,SvsServerUrlConfig.GEN_RANDOM_PATH,params,this.account);
         return apiResult;
     }
@@ -170,8 +172,9 @@ public class SvsServiceClient {
      * @param verifyLevel 可信标识验证级别(默认值为0)
      * @return
      */
+    @Override
     public ApiResult<Boolean> owaSvrVerify(String base64SignValue,String base64EncodeCert,String clientRandom,
-                                          String serverRandom,Integer verifyLevel){
+                                           String serverRandom,Integer verifyLevel){
         Map<String,Object> params = new HashMap<>();
         params.put("base64SignValue",base64SignValue);
         params.put("base64EncodeCert",base64EncodeCert);
@@ -187,6 +190,7 @@ public class SvsServiceClient {
      * @param clientRandom 客户端随机数
      * @return
      */
+    @Override
     public ApiResult<TwaSvrSignRspVo> twaSvrSign(String clientRandom){
         Map<String,Object> params = new HashMap<>();
         params.put("clientRandom",clientRandom);
@@ -203,8 +207,9 @@ public class SvsServiceClient {
      * @param verifyLevel 可信标识验证级别(默认值为0)
      * @return
      */
+    @Override
     public ApiResult<Boolean> twaSvrVerify(String base64SignValue,String base64EncodeCert,String clientRandom,
-                                          String serverRandom,Integer verifyLevel){
+                                           String serverRandom,Integer verifyLevel){
         Map<String,Object> params = new HashMap<>();
         params.put("base64SignValue",base64SignValue);
         params.put("base64EncodeCert",base64EncodeCert);
@@ -220,6 +225,7 @@ public class SvsServiceClient {
      * @param base64EncodeCert Base64 编码的可信标识
      * @return
      */
+    @Override
     public ApiResult<Boolean> verifyCert(String base64EncodeCert){
         Map<String,Object> params = new HashMap<>();
         params.put("base64EncodeCert",base64EncodeCert);

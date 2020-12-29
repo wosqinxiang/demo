@@ -1,7 +1,7 @@
 package com.ahdms.svs.client.constants;
 
 /**
- * @author zhoumin
+ * @author qinxiang
  * @version 1.0.0
  * @date 2020/7/3 9:41
  */
