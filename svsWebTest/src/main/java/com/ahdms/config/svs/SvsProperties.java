@@ -15,7 +15,7 @@ import java.util.Map;
  */
 @Getter
 @Setter
-@ConfigurationProperties("svs")
+//@ConfigurationProperties("svs")
 public class SvsProperties {
 
     private Map<String,SvsServer> appCodes = new LinkedHashMap();

@@ -1,5 +1,6 @@
 package com.ahdms.context;
 
+import com.ahdms.bean.model.SvsConfig;
 import com.ahdms.config.svs.SvsProperties;
 import com.ahdms.context.holder.SvsContextHolder;
 
@@ -17,9 +18,9 @@ public class SvsContextUtils {
                 .orElse(null);
     }
 
-    public static SvsProperties.SvsServer getSvsServer(){
+    public static SvsConfig getSvsConfig(){
         return Optional.ofNullable(SvsContextHolder.getContext())
-                .map(SvsContext::getSvsServer)
+                .map(SvsContext::getSvsConfig)
                 .orElse(null);
     }
 

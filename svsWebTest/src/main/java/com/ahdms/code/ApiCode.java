@@ -41,6 +41,9 @@ public enum ApiCode {
     ENC_DECRYPT_DATA_ERROR("ENC10003","数字信封解密失败"),
     ENCRYPT_DATA_ERROR("ENC10004","加密失败"),
     DECRYPT_DATA_ERROR("ENC10005","解密失败"),
+
+
+    MANAGE_USER_ACCOUNT_REPEAT("MGE10001","服务账号已存在"),
     ;
 
     private String code;

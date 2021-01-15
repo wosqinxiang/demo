@@ -1,5 +1,6 @@
 package com.ahdms.exception;
 
+import com.ahdms.code.ApiCode;
 import lombok.Getter;
 
 /**
@@ -13,6 +14,12 @@ public class ApiException extends RuntimeException{
 
     public ApiException(String code,String message){
         super(message);
+        this.code = code;
+    }
+
+    public ApiException(ApiCode apiCode){
+        super(apiCode.getMessage());
+        this.code = apiCode.getCode();
     }
 
     public ApiException(String message){

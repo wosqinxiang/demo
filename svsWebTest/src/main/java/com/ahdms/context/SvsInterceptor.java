@@ -1,5 +1,7 @@
 package com.ahdms.context;
 
+import com.ahdms.bean.model.SvsConfig;
+import com.ahdms.config.svs.SvsConfigCache;
 import com.ahdms.config.svs.SvsProperties;
 import com.ahdms.context.holder.SvsContextHolder;
 import com.ahdms.framework.core.commom.util.JsonUtils;
@@ -26,20 +28,19 @@ import static com.ahdms.code.ApiCode.CORE_ACCOUNT_ERROR;
 public class SvsInterceptor implements HandlerInterceptor {
 
     @Autowired
-    private SvsProperties svsProperties;
+    private SvsConfigCache svsConfigCache;
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         String account = "";
         try {
             account = request.getHeader(HeaderConstants.SVS_USER_ID);
-            Collection<String> accounts = svsProperties.getAccounts();
-            boolean b = accounts.stream().anyMatch(account::equals);
+            boolean b = svsConfigCache.checkAccount(account);
             if(b){
-                SvsProperties.SvsServer svsServer = svsProperties.getAppCodes().get(account);
+                SvsConfig svsConfig = svsConfigCache.get(account);
                 SvsContext svsContext = SvsContext.builder()
                         .account(account)
-                        .svsServer(svsServer)
+                        .svsConfig(svsConfig)
                         .build();
                 SvsContextHolder.setContext(svsContext);
                 return true;

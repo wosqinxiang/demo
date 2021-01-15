@@ -1,6 +1,6 @@
 package com.ahdms.context;
 
-import com.ahdms.config.svs.SvsProperties;
+import com.ahdms.bean.model.SvsConfig;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
@@ -16,6 +16,6 @@ public class SvsContext {
 
     private String account;
 
-    private SvsProperties.SvsServer svsServer;
+    private SvsConfig svsConfig;
 
 }

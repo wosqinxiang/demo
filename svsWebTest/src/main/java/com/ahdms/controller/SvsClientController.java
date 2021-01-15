@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.constraints.NotNull;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author qinxiang
@@ -29,7 +31,7 @@ public class SvsClientController {
 
     @PostMapping("/signData")
     @ApiOperation(value = "数字签名接口", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ApiResult<String> signData(HttpServletRequest request, @RequestBody @Validated @NotNull SignDataReqVo signDataReqVo) throws Exception {
+    public ApiResult<String> signData(@RequestBody @Validated @NotNull SignDataReqVo signDataReqVo) throws Exception {
         String signData = svsClientService.signData(signDataReqVo);
         return ApiResult.success(signData);
     }
@@ -83,10 +85,24 @@ public class SvsClientController {
         return ApiResult.success(encryptData);
     }
 
+    @PostMapping("/encryptDatas")
+    @ApiOperation(value = "批量对称加密接口", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public ApiResult<Map<String, String>> encryptDatas(@RequestBody List<String> params) throws Exception {
+        Map<String, String> encryptData = svsClientService.encryptDatas(params);
+        return ApiResult.success(encryptData);
+    }
+
     @PostMapping("/decryptData")
     @ApiOperation(value = "对称解密接口", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ApiResult<String> decryptData(@RequestBody @Validated @NotNull EncryptDataReqVo reqVo) throws Exception {
         String decryptData = svsClientService.decryptData(reqVo);
+        return ApiResult.success(decryptData);
+    }
+
+    @PostMapping("/decryptDatas")
+    @ApiOperation(value = "批量对称解密接口", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public ApiResult<Map<String, String>> decryptDatas(@RequestBody List<String> params) throws Exception {
+        Map<String, String> decryptData = svsClientService.decryptDatas(params);
         return ApiResult.success(decryptData);
     }
 

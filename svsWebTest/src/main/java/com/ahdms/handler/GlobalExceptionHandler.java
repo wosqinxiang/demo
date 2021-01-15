@@ -23,6 +23,10 @@ public class GlobalExceptionHandler {
     ApiResult handleException(Exception e){
         log.error(e.getMessage(),e);
 
+        if(e instanceof ApiException){
+            return new ApiResult(((ApiException) e).getCode(),e.getMessage(),null);
+        }
+
         if(e instanceof SVS_PrivatekeyAccessRightException){
             return ApiResult.error(CORE_PK_ACCESS_ERROR);
         }

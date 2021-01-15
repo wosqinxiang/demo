@@ -3,6 +3,9 @@ package com.ahdms.service;
 import com.ahdms.bean.req.*;
 import com.ahdms.bean.rsp.TwaSvrSignRspVo;
 
+import java.util.List;
+import java.util.Map;
+
 /**
  * @author qinxiang
  * @date 2020-12-16 18:07
@@ -39,4 +42,8 @@ public interface ISvsClientService {
     String decryptData(EncryptDataReqVo reqVo) throws Exception;
 
     String genEncryptKey() throws Exception;
+
+    Map<String, String> encryptDatas(List<String> params) throws Exception;
+
+    Map<String, String> decryptDatas(List<String> params) throws Exception;
 }
