@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ahdms.ctidservice.db.dao.KeyInfoMapper">
+  <resultMap id="BaseResultMap" type="com.ahdms.ctidservice.db.model.KeyInfo">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="app_id" jdbcType="VARCHAR" property="appId" />
+    <result column="secret_key" jdbcType="VARCHAR" property="secretKey" />
+    <result column="server_account" jdbcType="VARCHAR" property="serverAccount" />
+     <result column="app_package" jdbcType="VARCHAR" property="appPackage" />
+      <result column="sdk_code" jdbcType="VARCHAR" property="sdkCode" />
+      <result column="organizeId" jdbcType="VARCHAR" property="organizeId" />
+      
+  </resultMap>
+ 
+  <sql id="Base_Column_List">
+    id, app_id, secret_key, server_account, app_package, sdk_code, organizeId
+  </sql>
+  
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from key_info
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  
+  <select id="selectAll" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from key_info
+    order by id 
+  </select>
+  
+  <select id="selectByAppId" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from key_info
+    where app_id = #{appId,jdbcType=VARCHAR}
+  </select>
+  
+  <select id="selectByAppIdAndAppPackage" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from key_info
+    where app_id = #{appId,jdbcType=VARCHAR} and app_package = #{appPackage,jdbcType=VARCHAR}
+  </select>
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from key_info
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+ 
+  <insert id="insert" parameterType="com.ahdms.ctidservice.db.model.KeyInfo">
+    insert into key_info (id, app_id, secret_key, server_account, app_package
+      )
+    values (#{id,jdbcType=INTEGER}, #{appId,jdbcType=VARCHAR}, #{secretKey,jdbcType=VARCHAR}, #{serverAccount,jdbcType=VARCHAR}, #{appPackage,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.ahdms.ctidservice.db.model.KeyInfo">
+    insert into key_info
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="appId != null">
+        app_id,
+      </if>
+      <if test="secretKey != null">
+        secret_key,
+      </if>
+      <if test="serverAccount != null">
+        server_account,
+      </if>
+      <if test="appPackage != null">
+        app_package,
+      </if>
+      <if test="sdkCode != null">
+        sdk_code,
+      </if>
+      <if test="organizeId != null">
+        organizeId,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="appId != null">
+        #{appId,jdbcType=VARCHAR},
+      </if>
+      <if test="secretKey != null">
+        #{secretKey,jdbcType=VARCHAR},
+      </if>
+       <if test="serverAccount != null">
+        #{serverAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="appPackage != null">
+        #{appPackage,jdbcType=VARCHAR},
+      </if>
+      <if test="sdkCode != null">
+        #{sdkCode,jdbcType=VARCHAR},
+      </if>
+      <if test="organizeId != null">
+        #{organizeId,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  
+  <update id="updateByPrimaryKeySelective" parameterType="com.ahdms.ctidservice.db.model.KeyInfo">
+    update key_info
+    <set>
+      <if test="appId != null">
+        app_id = #{appId,jdbcType=VARCHAR},
+      </if>
+      <if test="secretKey != null">
+        secret_key = #{secretKey,jdbcType=VARCHAR},
+      </if>
+      <if test="serverAccount != null">
+        server_account = #{serverAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="appPackage != null">
+        app_package = #{appPackage,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.ahdms.ctidservice.db.model.KeyInfo">
+    update key_info
+    set app_id = #{appId,jdbcType=VARCHAR},
+      secret_key = #{secretKey,jdbcType=VARCHAR},
+      server_account = #{serverAccount,jdbcType=VARCHAR},
+      app_package = #{appPackage,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ahdms.ctidservice.db.dao.CtidInfosMapper">
+    <resultMap id="BaseResultMap" type="com.ahdms.ctidservice.db.model.CtidInfos">
+        <id column="id" jdbcType="VARCHAR" property="id"/>
+        <result column="card_name" jdbcType="VARCHAR" property="cardName"/>
+        <result column="card_num" jdbcType="VARCHAR" property="cardNum"/>
+        <result column="card_start_date" jdbcType="VARCHAR" property="cardStartDate"/>
+        <result column="card_end_date" jdbcType="VARCHAR" property="cardEndDate"/>
+        <result column="pid" jdbcType="VARCHAR" property="pid"/>
+        <result column="bid" jdbcType="VARCHAR" property="bid"/>
+        <result column="create_date" jdbcType="TIMESTAMP" property="createDate"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        id ,
+        card_name,
+        card_num,
+        card_start_date,
+        card_end_date,
+        pid,
+        create_date,
+        bid
+    </sql>
+    <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from ctid_infos
+        where id = #{id,jdbcType=VARCHAR}
+    </select>
+
+    <select id="selectByCardNum" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from ctid_infos
+        where card_num = #{cardNum,jdbcType=VARCHAR}
+    </select>
+
+    <select id="selectByPid" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from ctid_infos
+        where pid = #{pid,jdbcType=VARCHAR}
+    </select>
+
+    <select id="selectByCardNameAndCardNum" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from ctid_infos
+        where card_name = #{cardName,jdbcType=VARCHAR} and card_num = #{cardNum,jdbcType=VARCHAR}
+    </select>
+
+    <select id="selectByUserData" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from ctid_infos
+        where card_name = #{cardName,jdbcType=VARCHAR} and card_num = #{cardNum,jdbcType=VARCHAR} and
+        card_start_date = #{cardStartDate,jdbcType=VARCHAR} and card_end_date = #{cardEndDate,jdbcType=VARCHAR}
+    </select>
+
+    <select id="selectAll" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from ctid_infos
+    </select>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+        delete
+        from ctid_infos
+        where id = #{id,jdbcType=VARCHAR}
+    </delete>
+    <insert id="insert" parameterType="com.ahdms.ctidservice.db.model.CtidInfos">
+        insert into ctid_infos (id, card_name, card_num,
+                                card_start_date, card_end_date, pid, create_date)
+        values (#{id,jdbcType=VARCHAR}, #{cardName,jdbcType=VARCHAR}, #{cardNum,jdbcType=VARCHAR},
+                #{cardStartDate,jdbcType=VARCHAR}, #{cardEndDate,jdbcType=VARCHAR},
+                #{pid,jdbcType=VARCHAR}, #{createDate,jdbcType=TIMESTAMP})
+    </insert>
+    <insert id="insertSelective" parameterType="com.ahdms.ctidservice.db.model.CtidInfos">
+        insert into ctid_infos
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="cardName != null">
+                card_name,
+            </if>
+            <if test="cardNum != null">
+                card_num,
+            </if>
+            <if test="cardStartDate != null">
+                card_start_date,
+            </if>
+            <if test="cardEndDate != null">
+                card_end_date,
+            </if>
+            <if test="pid != null">
+                pid,
+            </if>
+            <if test="createDate != null">
+                create_date,
+            </if>
+            <if test="bid != null">
+                bid,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=VARCHAR},
+            </if>
+            <if test="cardName != null">
+                #{cardName,jdbcType=VARCHAR},
+            </if>
+            <if test="cardNum != null">
+                #{cardNum,jdbcType=VARCHAR},
+            </if>
+            <if test="cardStartDate != null">
+                #{cardStartDate,jdbcType=VARCHAR},
+            </if>
+            <if test="cardEndDate != null">
+                #{cardEndDate,jdbcType=VARCHAR},
+            </if>
+            <if test="pid != null">
+                #{pid,jdbcType=VARCHAR},
+            </if>
+            <if test="createDate != null">
+                #{createDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="bid != null">
+                #{bid,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.ahdms.ctidservice.db.model.CtidInfos">
+        update ctid_infos
+        <set>
+            <if test="cardName != null">
+                card_name = #{cardName,jdbcType=VARCHAR},
+            </if>
+            <if test="cardNum != null">
+                card_num = #{cardNum,jdbcType=VARCHAR},
+            </if>
+            <if test="cardStartDate != null">
+                card_start_date = #{cardStartDate,jdbcType=VARCHAR},
+            </if>
+            <if test="cardEndDate != null">
+                card_end_date = #{cardEndDate,jdbcType=VARCHAR},
+            </if>
+            <if test="pid != null">
+                pid = #{pid,jdbcType=VARCHAR},
+            </if>
+            <if test="createDate != null">
+                create_date = #{createDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="bid != null">
+                bid = #{bid,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where id = #{id,jdbcType=VARCHAR}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.ahdms.ctidservice.db.model.CtidInfos">
+        update ctid_infos
+        set card_name       = #{cardName,jdbcType=VARCHAR},
+            card_num        = #{cardNum,jdbcType=VARCHAR},
+            card_start_date = #{cardStartDate,jdbcType=VARCHAR},
+            card_end_date   = #{cardEndDate,jdbcType=VARCHAR},
+            pid             = #{pid,jdbcType=VARCHAR},
+            bid             = #{bid,jdbcType=VARCHAR},
+            create_date     = #{createDate,jdbcType=TIMESTAMP}
+        where id = #{id,jdbcType=VARCHAR}
+    </update>
+</mapper>

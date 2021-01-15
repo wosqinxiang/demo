@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ahdms.ctidservice.db.dao.CtidLogMapper">
+  <resultMap id="BaseResultMap" type="com.ahdms.ctidservice.db.model.CtidLog">
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="app_id" jdbcType="VARCHAR" property="appId" />
+    <result column="type" jdbcType="INTEGER" property="type" />
+    <result column="mode" jdbcType="VARCHAR" property="mode" />
+    <result column="result" jdbcType="INTEGER" property="result" />
+    <result column="error_desc" jdbcType="VARCHAR" property="errorDesc" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="ip" jdbcType="VARCHAR" property="ip" />
+    <result column="ctid_bsn" jdbcType="VARCHAR" property="ctidBsn" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, app_id, type, mode, result, error_desc, create_time, ip, ctid_bsn
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from ctid_log
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from ctid_log
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.ahdms.ctidservice.db.model.CtidLog">
+    insert into ctid_log (id, app_id, type, 
+      mode, result, error_desc, 
+      create_time, ip, ctid_bsn)
+    values (#{id,jdbcType=VARCHAR}, #{appId,jdbcType=VARCHAR}, #{type,jdbcType=INTEGER}, 
+      #{mode,jdbcType=VARCHAR}, #{result,jdbcType=INTEGER}, #{errorDesc,jdbcType=VARCHAR}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{ip,jdbcType=VARCHAR}, #{ctidBsn,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.ahdms.ctidservice.db.model.CtidLog">
+    insert into ctid_log
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="appId != null">
+        app_id,
+      </if>
+      <if test="type != null">
+        type,
+      </if>
+      <if test="mode != null">
+        mode,
+      </if>
+      <if test="result != null">
+        result,
+      </if>
+      <if test="errorDesc != null">
+        error_desc,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="ip != null">
+        ip,
+      </if>
+      <if test="ctidBsn != null">
+        ctid_bsn,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="appId != null">
+        #{appId,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null">
+        #{type,jdbcType=INTEGER},
+      </if>
+      <if test="mode != null">
+        #{mode,jdbcType=VARCHAR},
+      </if>
+      <if test="result != null">
+        #{result,jdbcType=INTEGER},
+      </if>
+      <if test="errorDesc != null">
+        #{errorDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="ip != null">
+        #{ip,jdbcType=VARCHAR},
+      </if>
+      <if test="ctidBsn != null">
+        #{ctidBsn,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.ahdms.ctidservice.db.model.CtidLog">
+    update ctid_log
+    <set>
+      <if test="appId != null">
+        app_id = #{appId,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null">
+        type = #{type,jdbcType=INTEGER},
+      </if>
+      <if test="mode != null">
+        mode = #{mode,jdbcType=VARCHAR},
+      </if>
+      <if test="result != null">
+        result = #{result,jdbcType=INTEGER},
+      </if>
+      <if test="errorDesc != null">
+        error_desc = #{errorDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="ip != null">
+        ip = #{ip,jdbcType=VARCHAR},
+      </if>
+      <if test="ctidBsn != null">
+        #{ctidBsn,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.ahdms.ctidservice.db.model.CtidLog">
+    update ctid_log
+    set app_id = #{appId,jdbcType=VARCHAR},
+      type = #{type,jdbcType=INTEGER},
+      mode = #{mode,jdbcType=VARCHAR},
+      result = #{result,jdbcType=INTEGER},
+      error_desc = #{errorDesc,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      ip = #{ip,jdbcType=VARCHAR},
+      ctid_bsn =  #{ctidBsn,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>

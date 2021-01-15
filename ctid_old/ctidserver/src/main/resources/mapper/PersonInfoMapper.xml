@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ahdms.ap.dao.PersonInfoDao" >
+  <resultMap id="BaseResultMap" type="com.ahdms.ap.model.PersonInfo" >
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="info_source" property="infoSource" jdbcType="INTEGER" />
+    <result column="openID" property="openid" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="idcard" property="idcard" jdbcType="VARCHAR" />
+    <result column="ctid_info" property="ctidInfo" jdbcType="VARCHAR" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="tel" property="tel" jdbcType="VARCHAR" />
+    <result column="is_ctid" property="isCtid" jdbcType="INTEGER" />
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.ahdms.ap.model.PersonInfo" extends="BaseResultMap" >
+    <result column="pic" property="pic" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, info_source, openID, create_time, idcard, ctid_info, name, tel, is_ctid
+  </sql>
+  <sql id="Blob_Column_List" >
+    pic
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from person_info
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from person_info
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.ahdms.ap.model.PersonInfo" >
+    insert into person_info (id, info_source, openID, 
+      create_time, idcard, ctid_info, 
+      name, tel, is_ctid, 
+      pic)
+    values (#{id,jdbcType=VARCHAR}, #{infoSource,jdbcType=INTEGER}, #{openid,jdbcType=VARCHAR}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{idcard,jdbcType=VARCHAR}, #{ctidInfo,jdbcType=VARCHAR}, 
+      #{name,jdbcType=VARCHAR}, #{tel,jdbcType=VARCHAR}, #{isCtid,jdbcType=INTEGER}, 
+      #{pic,jdbcType=LONGVARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.ahdms.ap.model.PersonInfo" >
+    insert into person_info
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="infoSource != null" >
+        info_source,
+      </if>
+      <if test="openid != null" >
+        openID,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="idcard != null" >
+        idcard,
+      </if>
+      <if test="ctidInfo != null" >
+        ctid_info,
+      </if>
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="tel != null" >
+        tel,
+      </if>
+      <if test="isCtid != null" >
+        is_ctid,
+      </if>
+      <if test="pic != null" >
+        pic,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="infoSource != null" >
+        #{infoSource,jdbcType=INTEGER},
+      </if>
+      <if test="openid != null" >
+        #{openid,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="idcard != null" >
+        #{idcard,jdbcType=VARCHAR},
+      </if>
+      <if test="ctidInfo != null" >
+        #{ctidInfo,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="tel != null" >
+        #{tel,jdbcType=VARCHAR},
+      </if>
+      <if test="isCtid != null" >
+        #{isCtid,jdbcType=INTEGER},
+      </if>
+      <if test="pic != null" >
+        #{pic,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.ahdms.ap.model.PersonInfo" >
+    update person_info
+    <set >
+      <if test="infoSource != null" >
+        info_source = #{infoSource,jdbcType=INTEGER},
+      </if>
+      <if test="openid != null" >
+        openID = #{openid,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="idcard != null" >
+        idcard = #{idcard,jdbcType=VARCHAR},
+      </if>
+      <if test="ctidInfo != null" >
+        ctid_info = #{ctidInfo,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="tel != null" >
+        tel = #{tel,jdbcType=VARCHAR},
+      </if>
+      <if test="isCtid != null" >
+        is_ctid = #{isCtid,jdbcType=INTEGER},
+      </if>
+      <if test="pic != null" >
+        pic = #{pic,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.ahdms.ap.model.PersonInfo" >
+    update person_info
+    set info_source = #{infoSource,jdbcType=INTEGER},
+      openID = #{openid,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      idcard = #{idcard,jdbcType=VARCHAR},
+      ctid_info = #{ctidInfo,jdbcType=VARCHAR},
+      name = #{name,jdbcType=VARCHAR},
+      tel = #{tel,jdbcType=VARCHAR},
+      is_ctid = #{isCtid,jdbcType=INTEGER},
+      pic = #{pic,jdbcType=LONGVARCHAR}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.ahdms.ap.model.PersonInfo" >
+    update person_info
+    set info_source = #{infoSource,jdbcType=INTEGER},
+      openID = #{openid,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      idcard = #{idcard,jdbcType=VARCHAR},
+      ctid_info = #{ctidInfo,jdbcType=VARCHAR},
+      name = #{name,jdbcType=VARCHAR},
+      tel = #{tel,jdbcType=VARCHAR},
+      is_ctid = #{isCtid,jdbcType=INTEGER}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  
+  <select id="selectByIdcard" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" /> 
+    from person_info
+    where idcard = #{idcard,jdbcType=VARCHAR} 
+    limit 0,1
+  </select>
+  
+   <select id="selectByOpenID" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" /> 
+    from person_info
+    where openID = #{openID,jdbcType=VARCHAR}  
+  </select>
+</mapper>

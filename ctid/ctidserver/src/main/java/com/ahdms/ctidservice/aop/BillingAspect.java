@@ -37,15 +37,11 @@ public class BillingAspect {
 
     }
 
-    @Around("cutService()")
-    public CtidResult before(ProceedingJoinPoint point){
-        Signature signature =  point.getSignature();
-        Method method1 = ( (MethodSignature)signature ).getMethod();
+    @Around("@annotation(billing)")
+    public CtidResult before(ProceedingJoinPoint point,Billing billing){
         try {
-            Method method = point.getTarget().getClass().getDeclaredMethod(signature.getName(), method1.getParameterTypes());
-            Billing annotation = method.getAnnotation(Billing.class);
-            JFChannelEnum channel = annotation.channel();
-            JFServiceEnum service = annotation.service();
+            JFChannelEnum channel = billing.channel();
+            JFServiceEnum service = billing.service();
             CtidResult result = new CtidResult();
             JFInfoModel jfData = new JFInfoModel();
             String key = "";

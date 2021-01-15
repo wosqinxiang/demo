@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ahdms.ctidservice.db.dao.DeviceInfoDao" >
+  <resultMap id="BaseResultMap" type="com.ahdms.ctidservice.db.model.DeviceModel" >
+    <result column="id" property="id" jdbcType="VARCHAR" />
+    <result column="device_name" property="deviceName" jdbcType="VARCHAR" />
+    <result column="identity" property="identity" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="create_id" property="createId" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="last_op_id" property="lastOpId" jdbcType="VARCHAR" />
+    <result column="last_op_time" property="lastOpTime" jdbcType="TIMESTAMP" />
+    <result column="device_desc" property="deviceDesc" jdbcType="VARCHAR" />
+    <result column="app_id" property="appId" jdbcType="VARCHAR" />
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.ahdms.ctidservice.db.model.DeviceModel" extends="BaseResultMap" >
+    <result column="cert_value" property="certValue" jdbcType="LONGVARBINARY" />
+    <result column="pkm_value" property="pkmValue" jdbcType="LONGVARBINARY" />
+  </resultMap>
+  <sql id="Base_Column_List">
+		id, device_name, identity, status, create_id, create_time, last_op_id,last_op_time,device_desc,app_id
+	</sql>
+  <sql id="Blob_Column_List" >
+    cert_value, pkm_value
+  </sql>
+  <insert id="insert" parameterType="com.ahdms.ctidservice.db.model.DeviceModel" >
+    insert into device_info (id, device_name, identity, 
+      status, create_id, create_time, 
+      last_op_id, last_op_time, device_desc,cert_value, 
+      pkm_value,app_id)
+    values (#{id,jdbcType=VARCHAR}, #{deviceName,jdbcType=VARCHAR}, #{identity,jdbcType=VARCHAR}, 
+      #{status,jdbcType=INTEGER}, #{createId,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{lastOpId,jdbcType=VARCHAR}, #{lastOpTime,jdbcType=TIMESTAMP},#{deviceDesc,jdbcType=VARCHAR}, #{certValue,jdbcType=LONGVARBINARY}, 
+      #{pkmValue,jdbcType=LONGVARBINARY}, #{appId,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.ahdms.ctidservice.db.model.DeviceModel" >
+    insert into device_info
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="deviceName != null" >
+        device_name,
+      </if>
+      <if test="identity != null" >
+        identity,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="createId != null" >
+        create_id,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="lastOpId != null" >
+        last_op_id,
+      </if>
+      <if test="lastOpTime != null" >
+        last_op_time,
+      </if>
+       <if test="deviceDesc != null" >
+        device_desc,
+      </if>
+      <if test="certValue != null" >
+        cert_value,
+      </if>
+      <if test="pkmValue != null" >
+        pkm_value,
+      </if>
+       <if test="appId != null" >
+        app_id,
+      </if>
+      
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="deviceName != null" >
+        #{deviceName,jdbcType=VARCHAR},
+      </if>
+      <if test="identity != null" >
+        #{identity,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="createId != null" >
+        #{createId,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lastOpId != null" >
+        #{lastOpId,jdbcType=VARCHAR},
+      </if>
+      <if test="lastOpTime != null" >
+        #{lastOpTime,jdbcType=TIMESTAMP},
+      </if>
+       <if test="deviceDesc != null" >
+        #{deviceDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="certValue != null" >
+        #{certValue,jdbcType=LONGVARBINARY},
+      </if>
+      <if test="pkmValue != null" >
+        #{pkmValue,jdbcType=LONGVARBINARY},
+      </if>
+       <if test="appId != null" >
+        #{appId,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  
+  <select id="pageQuery" parameterType="java.util.Map" resultMap="BaseResultMap">
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM device_info
+		order by create_time desc
+	</select>
+	
+	<update id="update" parameterType="java.util.Map">
+		update device_info
+		<set>
+			<if test="pkmFile != null">
+				pkm_value = #{pkmFile,jdbcType=LONGVARBINARY},
+			</if>
+			<if test="idenFile != null">
+				cert_value = #{idenFile,jdbcType=LONGVARBINARY},
+			</if>
+			<if test="lastOpId != null">
+				last_op_id = #{lastOpId,jdbcType=VARCHAR},
+			</if>
+			<if test="lastOpTime != null">
+				last_op_time = #{lastOpTime,jdbcType=TIMESTAMP},
+			</if> 
+		</set>
+		where id = #{id,jdbcType=VARCHAR}
+	</update>
+	
+	<delete id="delDevice" parameterType="java.lang.String">
+		delete from device_info
+		where id = #{id,jdbcType=VARCHAR}
+	</delete>
+	
+	 <select id="selectByID" parameterType="java.lang.String" resultMap="ResultMapWithBLOBs">
+		SELECT
+		<include refid="Base_Column_List" />
+		,
+		<include refid="Blob_Column_List" /> 
+		FROM device_info
+		where id = #{id,jdbcType=VARCHAR}
+	</select>
+	
+	 <select id="selectByName" parameterType="java.lang.String" resultMap="BaseResultMap">
+		SELECT
+		<include refid="Base_Column_List" /> 
+		FROM device_info
+		where device_name = #{0}
+	</select>
+	
+	 <select id="selectByAppid" parameterType="java.lang.String" resultMap="ResultMapWithBLOBs">
+		SELECT
+		<include refid="Base_Column_List" />
+		,
+		<include refid="Blob_Column_List" /> 
+		FROM device_info
+		where app_id = #{0}
+	</select>
+	
+</mapper>

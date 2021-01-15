@@ -1,0 +1,265 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ahdms.ap.dao.BoxInfoDao">
+	<resultMap id="BaseResultMap"
+		type="com.ahdms.ap.model.BoxInfo">
+		<id column="box_id" property="boxId" jdbcType="VARCHAR" />
+		<result column="box_num" property="boxNum" jdbcType="VARCHAR" />
+		<result column="box_location" property="boxLocation" jdbcType="VARCHAR" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+		<result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+		<result column="box_type" property="boxType" jdbcType="VARCHAR" />
+		<result column="server_department" property="serverDepartment"
+			jdbcType="VARCHAR" />
+		<result column="type_id" property="typeId" jdbcType="VARCHAR" />
+	</resultMap>
+
+	<resultMap id="BoxInfosMap"
+		type="com.ahdms.ap.model.BoxInfos">
+		<id column="box_id" property="boxId" jdbcType="VARCHAR" />
+		<result column="box_num" property="boxNum" jdbcType="VARCHAR" />
+		<result column="box_location" property="boxLocation" jdbcType="VARCHAR" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+		<result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+		<result column="box_type" property="boxType" jdbcType="VARCHAR" />
+		<result column="server_department" property="serverDepartment"
+			jdbcType="VARCHAR" />
+		<result column="type_id" property="typeId" jdbcType="VARCHAR" />
+		<result column="city" property="city" jdbcType="VARCHAR" />
+		<result column="type_name" property="typeName" jdbcType="VARCHAR" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" /> 
+		<result column="counts" property="counts" jdbcType="INTEGER" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		box_id, box_num, box_location, create_time, update_time,box_type,
+		server_department,type_id
+	</sql>
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
+		parameterType="java.lang.String">
+		select
+		<include refid="Base_Column_List" />
+		from box_info
+		where box_num = #{boxNum,jdbcType=VARCHAR} limit 1
+	</select>
+	
+	<select id="selectByBoxNum" resultMap="BaseResultMap"
+		parameterType="java.lang.String">
+		select
+		<include refid="Base_Column_List" />
+		from box_info
+		where box_id = #{boxId,jdbcType=VARCHAR}
+	</select>
+
+	<select id="selectByType" resultType="java.lang.Integer"
+		parameterType="java.lang.String">
+		select
+		count(1)
+		from box_info
+		where
+		type_id = #{typeId,jdbcType=VARCHAR}
+	</select>
+
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+		delete from
+		box_info
+		where box_id = #{boxId,jdbcType=VARCHAR}
+	</delete>
+	<insert id="insert" parameterType="com.ahdms.ap.model.BoxInfo">
+		insert into box_info (box_id,
+		box_num, box_location,
+		create_time,update_time, box_type,
+		server_department,type_id
+		)
+		values (#{boxId,jdbcType=VARCHAR},
+		#{boxNum,jdbcType=VARCHAR},
+		#{boxLocation,jdbcType=VARCHAR},
+		#{createTime,jdbcType=TIMESTAMP},
+		#{updateTime,jdbcType=TIMESTAMP},#{boxType,jdbcType=VARCHAR},
+		#{serverDepartment,jdbcType=VARCHAR},#{typeId,jdbcType=VARCHAR}
+		)
+	</insert>
+	<insert id="insertSelective" parameterType="com.ahdms.ap.model.BoxInfo">
+		insert into box_info
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="boxId != null">
+				box_id,
+			</if>
+			<if test="boxNum != null">
+				box_num,
+			</if>
+			<if test="boxLocation != null">
+				box_location,
+			</if>
+			<if test="createTime != null">
+				create_time,
+			</if>
+			<if test="updateTime != null">
+				update_time,
+			</if>
+			<if test="boxType != null">
+				box_type,
+			</if>
+			<if test="serverDepartment != null">
+				server_department,
+			</if>
+			<if test="typeId != null">
+				type_id,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="boxId != null">
+				#{boxId,jdbcType=VARCHAR},
+			</if>
+			<if test="boxNum != null">
+				#{boxNum,jdbcType=VARCHAR},
+			</if>
+			<if test="boxLocation != null">
+				#{boxLocation,jdbcType=VARCHAR},
+			</if>
+			<if test="createTime != null">
+				#{createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="updateTime != null">
+				#{updateTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="boxType != null">
+				#{boxType,jdbcType=VARCHAR},
+			</if>
+			<if test="serverDepartment != null">
+				#{serverDepartment,jdbcType=VARCHAR},
+			</if>
+			<if test="typeId != null">
+				#{typeId,jdbcType=VARCHAR},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective" parameterType="com.ahdms.ap.model.BoxInfo">
+		update box_info
+		<set>
+			<if test="boxNum != null">
+				box_num = #{boxNum,jdbcType=VARCHAR},
+			</if>
+			<if test="boxLocation != null">
+				box_location = #{boxLocation,jdbcType=VARCHAR},
+			</if>
+			<if test="createTime != null">
+				create_time = #{createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="updateTime != null">
+				update_time = #{updateTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="boxType != null">
+				box_type = #{boxType,jdbcType=VARCHAR},
+			</if>
+			<if test="serverDepartment != null">
+				server_department = #{serverDepartment,jdbcType=VARCHAR},
+			</if>
+			<if test="typeId != null">
+				type_id = #{typeId,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where box_id = #{boxId,jdbcType=VARCHAR}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.ahdms.ap.model.BoxInfo">
+		update box_info
+		set box_num = #{boxNum,jdbcType=VARCHAR},
+		box_location =
+		#{boxLocation,jdbcType=VARCHAR},
+		create_time =
+		#{createTime,jdbcType=TIMESTAMP},
+		update_time =
+		#{updateTime,jdbcType=TIMESTAMP},
+		box_type =
+		#{boxType,jdbcType=VARCHAR},
+		server_department =
+		#{serverDepartment,jdbcType=VARCHAR},
+		typeId =
+		#{typeId,jdbcType=VARCHAR}
+		where box_id = #{boxId,jdbcType=VARCHAR}
+	</update>
+
+	<!-- query -->
+	<select id="pageQuery" parameterType="java.util.Map" resultMap="BoxInfosMap">
+ 	SELECT  
+		box_id,
+		box_num,
+		box_location,
+		create_time,
+		update_time,
+		box_type,
+		server_department,
+		province,
+		city,
+		type_name,
+		type_id,
+		counts
+	FROM
+	(
+		(  
+			SELECT
+				bi.box_id,
+				bi.box_num,
+				bi.box_location,
+				bi.create_time,
+				bi.update_time,
+				bi.box_type,
+				bi.server_department,
+				bt.province,
+				bt.city,
+				bt.type_name,
+				bi.type_id
+			FROM
+				box_info bi
+			LEFT JOIN box_type bt ON bi.type_id = bt.id
+			<where>
+				<if test="boxNum != null">
+					and bi.box_num = #{boxNum, jdbcType=VARCHAR}
+				</if>
+				<if test="boxId != null">
+					and bi.box_id = #{boxId, jdbcType=VARCHAR}
+				</if>
+				<if test="boxTypeId != null">
+					and bi.type_id = #{boxTypeId, jdbcType=VARCHAR}
+				</if>
+				<if test="endTime != null">
+					and bi.create_time &lt;= #{endTime, jdbcType=TIMESTAMP}
+				</if>
+				<if test="startTime != null">
+					and bi.create_time &gt;= #{startTime, jdbcType=TIMESTAMP}
+				</if>
+				<if test="typeId != null">
+					and bi.type_id = #{typeId, jdbcType=VARCHAR}
+				</if>
+			</where>
+		) 	AS t  
+		LEFT JOIN 
+		(
+			SELECT
+				count(1) AS counts,
+				server_account
+			FROM
+				auth_record
+			GROUP BY
+				server_account
+			HAVING
+				server_account IN (
+					SELECT DISTINCT
+						(box_num)
+					FROM
+						box_info
+				)
+				
+		)  AS s ON t.box_num = s.server_account
+	)
+	order by create_time desc  
+	</select>
+
+	<select id="selectByNUM" parameterType="java.lang.String"
+		resultType="java.lang.Integer">
+		select
+		count(1)
+		from box_info
+		where box_num = #{1} and box_id
+		!= #{0}
+	</select>
+</mapper>

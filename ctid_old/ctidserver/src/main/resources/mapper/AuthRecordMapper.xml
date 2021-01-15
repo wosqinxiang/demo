@@ -1,0 +1,296 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ahdms.ap.dao.AuthRecordDao" >
+  <resultMap id="BaseResultMap" type="com.ahdms.ap.model.AuthRecord" >
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="info_source" property="infoSource" jdbcType="INTEGER" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="idcard" property="idcard" jdbcType="VARCHAR" />
+    <result column="auth_type" property="authType" jdbcType="INTEGER" />
+    <result column="ctid_type" property="ctidType" jdbcType="INTEGER" />
+    <result column="auth_result" property="authResult" jdbcType="INTEGER" />
+    <result column="server_account" property="serverAccount" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="serial_num" property="serialNum" jdbcType="VARCHAR" />
+    <result column="sign_data" property="signData" jdbcType="VARCHAR" />
+    <result column="openID" property="openid" jdbcType="VARCHAR" />
+    <result column="location" property="location" jdbcType="VARCHAR" />
+    <result column="auth_desc" property="authDesc" jdbcType="VARCHAR" />
+    <result column="auth_object" property="authObject" jdbcType="VARCHAR" />
+    <result column="certified_id" property="certifiedId" jdbcType="VARCHAR" />
+    
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.ahdms.ap.model.AuthRecord" extends="BaseResultMap" >
+    <result column="pic" property="pic" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, info_source, name, idcard, auth_type, ctid_type, auth_result, server_account, 
+    create_time, serial_num, sign_data, openID, location, auth_desc,auth_object,certified_id
+  </sql>
+  <sql id="Blob_Column_List" >
+    pic
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from auth_record
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+
+  <select id="selectBySerialNum" resultMap="ResultMapWithBLOBs" parameterType="java.lang.String" >
+    select
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from auth_record
+    where serial_num = #{serialNum,jdbcType=VARCHAR}
+  </select>
+  
+  <select id="select" resultMap="BaseResultMap"  parameterType="java.lang.String">
+    select 
+    <include refid="Base_Column_List" /> 
+    from auth_record
+    where  idcard = #{0}  
+    and auth_type in (1,2,8,9,11)
+    order by create_time desc
+  </select>
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from auth_record
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.ahdms.ap.model.AuthRecord" >
+    insert into auth_record (id, info_source, name, 
+      idcard, auth_type, ctid_type, 
+      auth_result, server_account, create_time, 
+      serial_num, pic,sign_data,openID,location,auth_desc,auth_object,certified_id)
+    values (#{id,jdbcType=VARCHAR}, #{infoSource,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, 
+      #{idcard,jdbcType=VARCHAR}, #{authType,jdbcType=INTEGER}, #{ctidType,jdbcType=INTEGER}, 
+      #{authResult,jdbcType=INTEGER}, #{serverAccount,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{serialNum,jdbcType=VARCHAR}, #{pic,jdbcType=LONGVARCHAR},#{signData,jdbcType=VARCHAR},#{openid,jdbcType=VARCHAR},
+      #{location,jdbcType=VARCHAR},#{authDesc,jdbcType=VARCHAR}，#{authObject,jdbcType=VARCHAR},#{certifiedId,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.ahdms.ap.model.AuthRecord" >
+    insert into auth_record
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="infoSource != null" >
+        info_source,
+      </if>
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="idcard != null" >
+        idcard,
+      </if>
+      <if test="authType != null" >
+        auth_type,
+      </if>
+      <if test="ctidType != null" >
+        ctid_type,
+      </if>
+      <if test="authResult != null" >
+        auth_result,
+      </if>
+      <if test="serverAccount != null" >
+        server_account,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="serialNum != null" >
+        serial_num,
+      </if>
+      <if test="pic != null" >
+        pic,
+      </if>
+       <if test="signData != null" >
+        sign_data,
+      </if>
+       <if test="openid != null" >
+        openID,
+      </if>
+       <if test="location != null" >
+        location,
+      </if>
+       <if test="authDesc != null" >
+        auth_desc,
+      </if> 
+       <if test="authObject != null" >
+        auth_object,
+      </if>
+       <if test="certifiedId != null" >
+        certified_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="infoSource != null" >
+        #{infoSource,jdbcType=INTEGER},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="idcard != null" >
+        #{idcard,jdbcType=VARCHAR},
+      </if>
+      <if test="authType != null" >
+        #{authType,jdbcType=INTEGER},
+      </if>
+      <if test="ctidType != null" >
+        #{ctidType,jdbcType=INTEGER},
+      </if>
+      <if test="authResult != null" >
+        #{authResult,jdbcType=INTEGER},
+      </if>
+      <if test="serverAccount != null" >
+        #{serverAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="serialNum != null" >
+        #{serialNum,jdbcType=VARCHAR},
+      </if>
+      <if test="pic != null" >
+        #{pic,jdbcType=LONGVARCHAR},
+      </if> 
+      <if test="signData != null" >
+        #{signData,jdbcType=VARCHAR},
+      </if>
+       <if test="openid != null" >
+        #{openid,jdbcType=VARCHAR},
+      </if>
+      <if test="location != null" >
+        #{location,jdbcType=VARCHAR},
+      </if>
+      <if test="authDesc != null" >
+        #{authDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="authObject != null" >
+        #{authObject,jdbcType=VARCHAR},
+      </if>
+       <if test="certifiedId != null" >
+        #{certifiedId,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.ahdms.ap.model.AuthRecord" >
+    update auth_record
+    <set >
+      <if test="infoSource != null" >
+        info_source = #{infoSource,jdbcType=INTEGER},
+      </if>
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="idcard != null" >
+        idcard = #{idcard,jdbcType=VARCHAR},
+      </if>
+      <if test="authType != null" >
+        auth_type = #{authType,jdbcType=INTEGER},
+      </if>
+      <if test="ctidType != null" >
+        ctid_type = #{ctidType,jdbcType=INTEGER},
+      </if>
+      <if test="authResult != null" >
+        auth_result = #{authResult,jdbcType=INTEGER},
+      </if>
+      <if test="serverAccount != null" >
+        server_account = #{serverAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="serialNum != null" >
+        serial_num = #{serialNum,jdbcType=VARCHAR},
+      </if>
+      <if test="pic != null" >
+        pic = #{pic,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="openid != null" >
+        openID = #{openid,jdbcType=VARCHAR},
+      </if>
+       <if test="location != null" >
+        location = #{location,jdbcType=VARCHAR},
+      </if>
+       <if test="authDesc != null" >
+        auth_desc = #{authDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="authObject != null" >
+        auth_object = #{authObject,jdbcType=VARCHAR},
+      </if>
+       <if test="certifiedId != null" >
+        certified_id = #{certifiedId,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.ahdms.ap.model.AuthRecord" >
+    update auth_record
+    set info_source = #{infoSource,jdbcType=INTEGER},
+      name = #{name,jdbcType=VARCHAR},
+      idcard = #{idcard,jdbcType=VARCHAR},
+      auth_type = #{authType,jdbcType=INTEGER},
+      ctid_type = #{ctidType,jdbcType=INTEGER},
+      auth_result = #{authResult,jdbcType=INTEGER},
+      server_account = #{serverAccount,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      serial_num = #{serialNum,jdbcType=VARCHAR},
+      pic = #{pic,jdbcType=LONGVARCHAR},
+      openID = #{openid,jdbcType=VARCHAR},
+      location = #{location,jdbcType=VARCHAR},
+      auth_desc = #{authDesc,jdbcType=VARCHAR},
+      auth_object = #{authObject,jdbcType=VARCHAR},
+      certified_id = #{certifiedId,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.ahdms.ap.model.AuthRecord" >
+    update auth_record
+    set info_source = #{infoSource,jdbcType=INTEGER},
+      name = #{name,jdbcType=VARCHAR},
+      idcard = #{idcard,jdbcType=VARCHAR},
+      auth_type = #{authType,jdbcType=INTEGER},
+      ctid_type = #{ctidType,jdbcType=INTEGER},
+      auth_result = #{authResult,jdbcType=INTEGER},
+      server_account = #{serverAccount,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      serial_num = #{serialNum,jdbcType=VARCHAR},
+      openID = #{openid,jdbcType=VARCHAR},
+      location = #{location,jdbcType=VARCHAR},
+      auth_desc = #{authDesc,jdbcType=VARCHAR},
+      auth_object = #{authObject,jdbcType=VARCHAR},
+      certified_id = #{certifiedId,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  
+  <select id="selectArchive" parameterType="java.time.LocalDate" resultMap="BaseResultMap" >
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from auth_record
+    where  create_time &lt; #{0}
+  </select>
+  
+   <delete id="delArchive"  parameterType="java.time.LocalDate" >
+    delete from auth_record
+    where create_time &lt; #{0}
+  </delete>
+  
+   <select id="getRecordBySerialNum" resultMap="ResultMapWithBLOBs" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from auth_record
+    where openID = #{0} and serial_num = #{1}
+  </select>
+  
+</mapper>

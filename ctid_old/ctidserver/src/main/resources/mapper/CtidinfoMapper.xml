@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ahdms.ctidservice.db.dao.CtidinfoMapper">
+  <resultMap id="BaseResultMap" type="com.ahdms.ctidservice.db.model.Ctidinfo">
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="user_id" jdbcType="VARCHAR" property="userId" />
+    <result column="ctid_info" jdbcType="VARCHAR" property="ctidInfo" />
+    <result column="app_id" jdbcType="VARCHAR" property="appId" />
+    <result column="ctid_down_time" jdbcType="TIMESTAMP" property="ctidDownTime" />
+    <result column="ctid_status" jdbcType="INTEGER" property="ctidStatus" />
+    <result column="ctid_valid_date" jdbcType="VARCHAR" property="ctidValidDate" />
+    <result column="ctid_num" jdbcType="VARCHAR" property="ctidNum" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, user_id, ctid_info, app_id, ctid_down_time, ctid_status, ctid_valid_date, ctid_num
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from ctidinfo
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  
+  <select id="selectByUserIdAndAppId" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from ctidinfo
+    where user_id = #{userId,jdbcType=VARCHAR} and app_id = #{appId,jdbcType=VARCHAR}
+  </select>
+  
+  <select id="selectByCardNum" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from ctidinfo
+    where user_id = (select id from ctid_infos where ctid_infos.card_num = #{cardNum,jdbcType=VARCHAR}) 
+    and app_id = '0003';
+  </select>
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from ctidinfo
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.ahdms.ctidservice.db.model.Ctidinfo">
+    insert into ctidinfo (id, user_id, ctid_info, 
+      app_id, ctid_down_time, ctid_status, 
+      ctid_valid_date, ctid_num)
+    values (#{id,jdbcType=VARCHAR}, #{userId,jdbcType=VARCHAR}, #{ctidInfo,jdbcType=VARCHAR}, 
+      #{appId,jdbcType=VARCHAR}, #{ctidDownTime,jdbcType=TIMESTAMP}, #{ctidStatus,jdbcType=INTEGER}, 
+      #{ctidValidDate,jdbcType=VARCHAR}, #{ctidNum,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.ahdms.ctidservice.db.model.Ctidinfo">
+    insert into ctidinfo
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="ctidInfo != null">
+        ctid_info,
+      </if>
+      <if test="appId != null">
+        app_id,
+      </if>
+      <if test="ctidDownTime != null">
+        ctid_down_time,
+      </if>
+      <if test="ctidStatus != null">
+        ctid_status,
+      </if>
+      <if test="ctidValidDate != null">
+        ctid_valid_date,
+      </if>
+      <if test="ctidNum != null">
+        ctid_num,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="userId != null">
+        #{userId,jdbcType=VARCHAR},
+      </if>
+      <if test="ctidInfo != null">
+        #{ctidInfo,jdbcType=VARCHAR},
+      </if>
+      <if test="appId != null">
+        #{appId,jdbcType=VARCHAR},
+      </if>
+      <if test="ctidDownTime != null">
+        #{ctidDownTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="ctidStatus != null">
+        #{ctidStatus,jdbcType=INTEGER},
+      </if>
+      <if test="ctidValidDate != null">
+        #{ctidValidDate,jdbcType=VARCHAR},
+      </if>
+      <if test="ctidNum != null">
+        #{ctidNum,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.ahdms.ctidservice.db.model.Ctidinfo">
+    update ctidinfo
+    <set>
+      <if test="userId != null">
+        user_id = #{userId,jdbcType=VARCHAR},
+      </if>
+      <if test="ctidInfo != null">
+        ctid_info = #{ctidInfo,jdbcType=VARCHAR},
+      </if>
+      <if test="appId != null">
+        app_id = #{appId,jdbcType=VARCHAR},
+      </if>
+      <if test="ctidDownTime != null">
+        ctid_down_time = #{ctidDownTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="ctidStatus != null">
+        ctid_status = #{ctidStatus,jdbcType=INTEGER},
+      </if>
+      <if test="ctidValidDate != null">
+        ctid_valid_date = #{ctidValidDate,jdbcType=VARCHAR},
+      </if>
+      <if test="ctidNum != null">
+        ctid_num = #{ctidNum,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.ahdms.ctidservice.db.model.Ctidinfo">
+    update ctidinfo
+    set user_id = #{userId,jdbcType=VARCHAR},
+      ctid_info = #{ctidInfo,jdbcType=VARCHAR},
+      app_id = #{appId,jdbcType=VARCHAR},
+      ctid_down_time = #{ctidDownTime,jdbcType=TIMESTAMP},
+      ctid_status = #{ctidStatus,jdbcType=INTEGER},
+      ctid_valid_date = #{ctidValidDate,jdbcType=VARCHAR},
+      ctid_num = #{ctidNum,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>

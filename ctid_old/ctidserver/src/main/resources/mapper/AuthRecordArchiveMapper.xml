@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ahdms.ap.dao.AuthRecordArchiveDao">
+	<resultMap id="BaseResultMap" type="com.ahdms.ap.model.AuthRecord">
+		<id column="id" property="id" jdbcType="VARCHAR" />
+		<result column="info_source" property="infoSource" jdbcType="INTEGER" />
+		<result column="name" property="name" jdbcType="VARCHAR" />
+		<result column="idcard" property="idcard" jdbcType="VARCHAR" />
+		<result column="auth_type" property="authType" jdbcType="INTEGER" />
+		<result column="ctid_type" property="ctidType" jdbcType="INTEGER" />
+		<result column="auth_result" property="authResult" jdbcType="INTEGER" />
+		<result column="server_account" property="serverAccount"
+			jdbcType="VARCHAR" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+		<result column="serial_num" property="serialNum" jdbcType="VARCHAR" />
+		<result column="sign_data" property="signData" jdbcType="VARCHAR" />
+		<result column="openID" property="openid" jdbcType="VARCHAR" />
+		<result column="location" property="location" jdbcType="VARCHAR" />
+		<result column="auth_desc" property="authDesc" jdbcType="VARCHAR" />
+		<result column="auth_object" property="authObject" jdbcType="VARCHAR" />
+		<result column="certified_id" property="certifiedId" jdbcType="VARCHAR" />
+
+	</resultMap>
+	<resultMap id="ResultMapWithBLOBs" type="com.ahdms.ap.model.AuthRecord"
+		extends="BaseResultMap">
+		<result column="pic" property="pic" jdbcType="LONGVARCHAR" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		id, info_source, name, idcard, auth_type, ctid_type,
+		auth_result,
+		server_account,
+		create_time, serial_num, sign_data, openID,
+		location, auth_desc,,auth_object,certified_id
+	</sql>
+	<sql id="Blob_Column_List">
+		pic
+	</sql>
+
+	<insert id="insertArchive" parameterType="java.util.List"
+		useGeneratedKeys="false">
+		insert into auth_record_archive
+		(
+		id, info_source, name, idcard,
+		auth_type, ctid_type,
+		auth_result,
+		server_account,
+		create_time,
+		serial_num, sign_data, openID,
+		location, auth_desc,pic,auth_object,certified_id)
+		values
+		<foreach collection="list" item="item" index="index"
+			separator=",">
+			(
+			#{item.id}, #{item.infoSource}, #{item.name},
+			#{item.idcard},
+			#{item.authType},
+			#{item.ctidType}, #{item.authResult},
+			#{item.serverAccount},
+			#{item.createTime}, #{item.serialNum},
+			#{item.signData}, #{item.openid},
+			#{item.location}, #{item.authDesc},
+			#{item.pic},#{item.authObject},
+			#{item.certifiedId}
+			)
+		</foreach>
+	</insert>
+
+
+</mapper>

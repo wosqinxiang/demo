@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ahdms.ap.dao.AuthBizDao" >
+  <resultMap id="BaseResultMap" type="com.ahdms.ap.model.AuthBiz" >
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="serial_num" property="serialNum" jdbcType="VARCHAR" />
+    <result column="server_account" property="serverAccount" jdbcType="VARCHAR" />
+    <result column="info_source" property="infoSource" jdbcType="INTEGER" />
+    <result column="url" property="url" jdbcType="VARCHAR" />
+    <result column="is_callback" property="isCallback" jdbcType="INTEGER" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="server_desc" property="serverDesc" jdbcType="VARCHAR" />
+    <result column="auth_type" property="authType" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, serial_num, server_account, info_source, url, is_callback, create_time,server_desc,auth_type
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from auth_biz
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  
+   <select id="queryBySerial" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from auth_biz
+    where serial_num = #{serialNum,jdbcType=VARCHAR} and is_callback = 1
+  </select>
+  
+    <select id="queryOverDue" resultMap="BaseResultMap" parameterType="java.util.Date" >
+    select 
+    <include refid="Base_Column_List" />
+    from auth_biz
+    where auth_type = 3 and is_callback =1
+     and create_time &lt;= #{0}
+  </select>
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from auth_biz
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.ahdms.ap.model.AuthBiz" >
+    insert into auth_biz (id, serial_num, server_account, 
+      info_source, url, is_callback, create_time,server_desc,auth_type
+      )
+    values (#{id,jdbcType=VARCHAR}, #{serialNum,jdbcType=VARCHAR}, #{serverAccount,jdbcType=VARCHAR}, 
+      #{infoSource,jdbcType=INTEGER}, #{url,jdbcType=VARCHAR}, #{isCallback,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP},
+       #{serverDesc,jdbcType=VARCHAR}, #{authType,jdbcType=INTEGER}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.ahdms.ap.model.AuthBiz" >
+    insert into auth_biz
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="serialNum != null" >
+        serial_num,
+      </if>
+      <if test="serverAccount != null" >
+        server_account,
+      </if>
+      <if test="infoSource != null" >
+        info_source,
+      </if>
+      <if test="url != null" >
+        url,
+      </if>
+      <if test="isCallback != null" >
+        is_callback,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="serverDesc != null">
+        server_desc,
+      </if>
+      <if test="authType != null">
+        auth_type,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="serialNum != null" >
+        #{serialNum,jdbcType=VARCHAR},
+      </if>
+      <if test="serverAccount != null" >
+        #{serverAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="infoSource != null" >
+        #{infoSource,jdbcType=INTEGER},
+      </if>
+      <if test="url != null" >
+        #{url,jdbcType=VARCHAR},
+      </if>
+      <if test="isCallback != null" >
+        #{isCallback,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="serverDesc != null" >
+        #{serverDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="authType != null" >
+        #{authType,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.ahdms.ap.model.AuthBiz" >
+    update auth_biz
+    <set >
+      <if test="serialNum != null" >
+        serial_num = #{serialNum,jdbcType=VARCHAR},
+      </if>
+      <if test="serverAccount != null" >
+        server_account = #{serverAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="infoSource != null" >
+        info_source = #{infoSource,jdbcType=INTEGER},
+      </if>
+      <if test="url != null" >
+        url = #{url,jdbcType=VARCHAR},
+      </if>
+      <if test="isCallback != null" >
+        is_callback = #{isCallback,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+       <if test="serverDesc != null" >
+        server_desc = #{serverDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="authType != null" >
+        auth_type = #{authType,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.ahdms.ap.model.AuthBiz" >
+    update auth_biz
+    set serial_num = #{serialNum,jdbcType=VARCHAR},
+      server_account = #{serverAccount,jdbcType=VARCHAR},
+      info_source = #{infoSource,jdbcType=INTEGER},
+      url = #{url,jdbcType=VARCHAR},
+      is_callback = #{isCallback,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      server_desc = #{serverDesc,jdbcType=VARCHAR},
+      auth_type = #{authType,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>

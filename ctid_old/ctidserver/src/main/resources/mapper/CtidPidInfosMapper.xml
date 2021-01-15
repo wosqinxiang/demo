@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ahdms.ctidservice.db.dao.CtidPidInfosMapper" >
+  <resultMap id="BaseResultMap" type="com.ahdms.ctidservice.db.model.CtidPidInfos" >
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="ctid_infos_id" property="ctidInfosId" jdbcType="VARCHAR" />
+    <result column="pid" property="pid" jdbcType="VARCHAR" />
+    <result column="specialline_code" property="speciallineCode" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, ctid_infos_id, pid, specialline_code
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select
+    <include refid="Base_Column_List" />
+    from ctid_pid_infos
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+
+  <select id="queryByPidAndSpeciallineCode" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select
+    <include refid="Base_Column_List" />
+    from ctid_pid_infos
+    <where>
+      <if test="pid != null">
+        and pid = #{pid,jdbcType=VARCHAR}
+      </if>
+      <if test="speciallineCode != null">
+        and specialline_code = #{speciallineCode,jdbcType=VARCHAR}
+      </if>
+    </where>
+  </select>
+
+  <select id="queryByPid" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select
+    <include refid="Base_Column_List" />
+    from ctid_pid_infos
+    where pid = #{pid,jdbcType=VARCHAR}
+  </select>
+  <select id="selectByUserIdAndPid" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from ctid_pid_infos
+    <where>
+      <if test="pid != null">
+        and pid = #{pid,jdbcType=VARCHAR}
+      </if>
+      <if test="ctidInfosId != null">
+        and ctid_infos_id = #{ctidInfosId,jdbcType=VARCHAR}
+      </if>
+    </where>
+  </select>
+
+
+  <insert id="insertSelective" parameterType="com.ahdms.ctidservice.db.model.CtidPidInfos" >
+    insert into ctid_pid_infos
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="ctidInfosId != null" >
+        ctid_infos_id,
+      </if>
+      <if test="pid != null" >
+        pid,
+      </if>
+      <if test="speciallineCode != null" >
+        specialline_code,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="ctidInfosId != null" >
+        #{ctidInfosId,jdbcType=VARCHAR},
+      </if>
+      <if test="pid != null" >
+        #{pid,jdbcType=VARCHAR},
+      </if>
+      <if test="speciallineCode != null" >
+        #{speciallineCode,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.ahdms.ctidservice.db.model.CtidPidInfos" >
+    update ctid_pid_infos
+    <set >
+      <if test="ctidInfosId != null" >
+        ctid_infos_id = #{ctidInfosId,jdbcType=VARCHAR},
+      </if>
+      <if test="pid != null" >
+        pid = #{pid,jdbcType=VARCHAR},
+      </if>
+      <if test="speciallineCode != null" >
+        specialline_code = #{speciallineCode,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>

@@ -1,0 +1,32 @@
+<configuration>
+	<springProperty scope="context" name="LOG_HOME" source="log.file.path"/>
+	<springProperty scope="context" name="LOG_LEVEL" source="log.file.level"/>
+	<appender name="dailyRollingFileAppender"
+		class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>${LOG_HOME}/bjca-server.log</file>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<!-- daily rollover -->
+			<FileNamePattern>${LOG_HOME}/bjca-server.%d{yyyy-MM-dd}.log</FileNamePattern>
+			<!-- keep 30 days' worth of history -->
+			<maxHistory>30</maxHistory>
+		</rollingPolicy>
+		<encoder>
+			<Pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %msg%n%caller{1}
+			</Pattern>
+		</encoder>
+	</appender>
+
+	<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+		<!-- encoder 默认配置为PatternLayoutEncoder -->
+		<encoder>
+			<pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %msg%n%caller{1}
+			</pattern>
+		</encoder>
+	</appender>
+	
+	<root level="${LOG_LEVEL}">
+		<appender-ref ref="dailyRollingFileAppender" />
+		<appender-ref ref="STDOUT" />
+	</root>
+
+</configuration>

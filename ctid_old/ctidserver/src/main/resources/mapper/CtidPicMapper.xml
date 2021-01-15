@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ahdms.ctidservice.db.dao.CtidPicMapper">
+  <resultMap id="BaseResultMap" type="com.ahdms.ctidservice.db.model.CtidPic">
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="ctid_hash" jdbcType="VARCHAR" property="ctidHash" />
+    <result column="picture" jdbcType="VARCHAR" property="picture" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, ctid_hash, picture
+  </sql>
+  
+  <select id="selectByCtidHash" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from ctid_pic
+    where ctid_hash = #{ctidHash,jdbcType=VARCHAR}
+  </select>
+  
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from ctid_pic
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from ctid_pic
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.ahdms.ctidservice.db.model.CtidPic">
+    insert into ctid_pic (id, ctid_hash, picture
+      )
+    values (#{id,jdbcType=VARCHAR}, #{ctidHash,jdbcType=VARCHAR}, #{picture,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.ahdms.ctidservice.db.model.CtidPic">
+    insert into ctid_pic
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="ctidHash != null">
+        ctid_hash,
+      </if>
+      <if test="picture != null">
+        picture,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="ctidHash != null">
+        #{ctidHash,jdbcType=VARCHAR},
+      </if>
+      <if test="picture != null">
+        #{picture,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.ahdms.ctidservice.db.model.CtidPic">
+    update ctid_pic
+    <set>
+      <if test="ctidHash != null">
+        ctid_hash = #{ctidHash,jdbcType=VARCHAR},
+      </if>
+      <if test="picture != null">
+        picture = #{picture,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.ahdms.ctidservice.db.model.CtidPic">
+    update ctid_pic
+    set ctid_hash = #{ctidHash,jdbcType=VARCHAR},
+      picture = #{picture,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>
