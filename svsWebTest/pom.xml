@@ -31,6 +31,24 @@
             <groupId>com.ahdms</groupId>
         </dependency>
 
+        <!--<dependency>-->
+            <!--<artifactId>dms-framework-mybatis</artifactId>-->
+            <!--<groupId>com.ahdms</groupId>-->
+        <!--</dependency>-->
+
+        <!--&lt;!&ndash; Mysql驱动依赖 &ndash;&gt;-->
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+        </dependency>
+
+        <!--&lt;!&ndash; MybatisPlus &ndash;&gt;-->
+        <dependency>
+            <groupId>com.baomidou</groupId>
+            <artifactId>mybatis-plus-boot-starter</artifactId>
+            <version>3.1.1</version>
+        </dependency>
+
         <dependency>
             <artifactId>dms-framework-swagger</artifactId>
             <groupId>com.ahdms</groupId>
