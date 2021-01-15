@@ -1,22 +1,26 @@
 package com.ahdms.svs.client.result;
 
 import com.ahdms.svs.client.constants.ApiCode;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 
 /**
  * @author qinxiang
  * @date 2020-12-24 14:44
  */
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
+
 public class ApiResult<T> {
 
     private String code;
     private String message;
     private T data;
+
+    public ApiResult() {
+    }
+
+    public ApiResult(String code, String message, T data) {
+        this.code = code;
+        this.message = message;
+        this.data = data;
+    }
 
     public static <T> ApiResult<T> error(String message){
         return new ApiResult<>("1",message,null);
@@ -28,5 +32,29 @@ public class ApiResult<T> {
 
     public static <T> ApiResult<T> error(ApiCode apiCode){
         return new ApiResult<>(apiCode.getCode(),apiCode.getMessage(),null);
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
+    public T getData() {
+        return data;
+    }
+
+    public void setData(T data) {
+        this.data = data;
     }
 }

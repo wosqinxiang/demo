@@ -6,7 +6,11 @@ import com.ahdms.svs.client.result.ApiResult;
 import com.ahdms.svs.client.util.HttpExecuteUtils;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * @author qinxiang
@@ -124,6 +128,30 @@ public class DefaultSecurityEngineDeal extends SecurityEngineDeal{
         Map<String,Object> params = new HashMap<>();
         params.put("inData",inData);
         ApiResult<String> apiResult = HttpExecuteUtils.execute(this.serverUrl,SvsServerUrlConfig.ENCRYPT_DATA_PATH,params,this.account);
+        return apiResult;
+    }
+
+    @Override
+    public ApiResult<Map<String, String>> encryptDatas(Set<String> inDatas) {
+        ApiResult<Map<String, String>> apiResult = HttpExecuteUtils.execute(this.serverUrl,SvsServerUrlConfig.ENCRYPT_DATAS_PATH,inDatas,this.account);
+        return apiResult;
+    }
+
+    @Override
+    public ApiResult<Map<String, String>> encryptDatas(String... inDatas) {
+        Set<String> collect = Stream.of(inDatas).collect(Collectors.toSet());
+        return encryptDatas(collect);
+    }
+
+    @Override
+    public ApiResult<Map<String, String>> decryptDatas(String... inDatas) {
+        Set<String> collect = Stream.of(inDatas).collect(Collectors.toSet());
+        return decryptDatas(collect);
+    }
+
+    @Override
+    public ApiResult<Map<String, String>> decryptDatas(Set<String> inDatas) {
+        ApiResult<Map<String, String>> apiResult = HttpExecuteUtils.execute(this.serverUrl,SvsServerUrlConfig.DECRYPT_DATAS_PATH,inDatas,this.account);
         return apiResult;
     }
 

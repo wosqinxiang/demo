@@ -42,4 +42,8 @@ public class SvsServerUrlConfig {
 
     public static final String DECRYPT_DATA_PATH = "api/svs/decryptData";
 
+    public static final String ENCRYPT_DATAS_PATH = "api/svs/encryptDatas";
+
+    public static final String DECRYPT_DATAS_PATH = "api/svs/decryptDatas";
+
 }

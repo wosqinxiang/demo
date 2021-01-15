@@ -3,6 +3,9 @@ package com.ahdms.svs.client;
 import com.ahdms.svs.client.bean.TwaSvrSignRspVo;
 import com.ahdms.svs.client.result.ApiResult;
 
+import java.util.Map;
+import java.util.Set;
+
 /**
  * @author qinxiang
  * @date 2020-12-28 11:35
@@ -82,11 +85,39 @@ public abstract class SecurityEngineDeal {
     public abstract ApiResult<String> encryptData(String inData);
 
     /**
+     * 批量加密接口
+     * @param inDatas 待加密的数据集合
+     * @return
+     */
+    public abstract ApiResult<Map<String,String>> encryptDatas(Set<String> inDatas);
+
+    /**
+     * 批量加密接口
+     * @param inDatas 待加密的数据集合
+     * @return
+     */
+    public abstract ApiResult<Map<String,String>> encryptDatas(String ...inDatas);
+
+    /**
      * 对称解密接口
      * @param inData 待解密数据
      * @return
      */
     public abstract ApiResult<String> decryptData(String inData);
+
+    /**
+     * 批量对称解密接口
+     * @param inDatas 待解密的数据集合
+     * @return
+     */
+    public abstract ApiResult<Map<String,String>> decryptDatas(Set<String> inDatas);
+
+    /**
+     * 批量对称解密接口
+     * @param inDatas 待解密的数据集合
+     * @return
+     */
+    public abstract ApiResult<Map<String,String>> decryptDatas(String ...inDatas);
 
     /**
      * 获取可信标识信息接口
