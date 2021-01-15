@@ -1,0 +1,33 @@
+server:
+  port: 9033
+
+default:
+  serverId: 100021
+
+spring:
+  datasource:
+    password: AHdms520
+    username: root
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://172.16.1.7:3306/ctid?serverTimezone=UTC&characterEncoding=utf-8
+
+mybatis-plus:
+  global-config:
+    db-config:
+      id-type: INPUT
+dubbo:
+  application:
+    name: ctid-SERVER-consumer1
+  registry:
+    protocol: zookeeper
+    address: 172.16.1.5:2181
+  protocol:
+    name: dubbo
+    port: 12329
+    check: false
+  monitor:
+    protocol: register
+  consumer:
+    check: false
+    timeout: 100000
+  version: 2.0.0

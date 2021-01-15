@@ -1,0 +1,29 @@
+spring:
+  application:
+    name: "@artifactId@"
+  profiles:
+    active: "@spring.profiles.active@"
+  main:
+    allow-bean-definition-overriding: true
+
+jasypt:
+  encryptor:
+    password: AHdms
+    property:
+      prefix: Digest(
+
+dms:
+  server:
+    shortName: SVSTEST
+
+#app:
+#  id: new-ctidserver-local
+#
+#apollo:
+#  meta: http://172.16.1.190:8080
+#  ##官方解释为注入默认application namespace的配置示例
+#  bootstrap:
+#    enabled: true
+#  ## apollo本地配置文件缓存地址
+#  cacheDir: E:/mine/data/
+#  enable: true
