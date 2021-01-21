@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ahdms.billing.dao.BoxTypeDao" >
+  <resultMap id="BaseResultMap" type="com.ahdms.billing.model.BoxType" >
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="province" property="province" jdbcType="VARCHAR" />
+    <result column="city" property="city" jdbcType="VARCHAR" />
+    <result column="type_name" property="typeName" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+     <result column="user_service_account" property="userServiceAccount" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, province, city, type_name, create_time,user_service_account
+  </sql>
+  
+  <select id="selectByBoxNum" resultMap="BaseResultMap"
+		parameterType="java.lang.String">
+		select bt.* from box_info bi,box_type bt where 
+		bi.box_num = #{boxNum,jdbcType=VARCHAR} and bi.type_id = bt.id;
+		
+	</select>
+  
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from box_type
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from box_type
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.ahdms.billing.model.BoxType" >
+    insert into box_type (id, province, city, 
+      type_name, create_time,user_service_account)
+    values (#{id,jdbcType=VARCHAR}, #{province,jdbcType=VARCHAR}, #{city,jdbcType=VARCHAR}, 
+      #{typeName,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP},#{userServiceAccount,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.ahdms.billing.model.BoxType" >
+    insert into box_type
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="province != null" >
+        province,
+      </if>
+      <if test="city != null" >
+        city,
+      </if>
+      <if test="typeName != null" >
+        type_name,
+      </if>
+      <if test="userServiceAccount != null" >
+        user_service_account,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="province != null" >
+        #{province,jdbcType=VARCHAR},
+      </if>
+      <if test="city != null" >
+        #{city,jdbcType=VARCHAR},
+      </if>
+      <if test="typeName != null" >
+        #{typeName,jdbcType=VARCHAR},
+      </if>
+      <if test="userServiceAccount != null" >
+        #{userServiceAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.ahdms.billing.model.BoxType" >
+    update box_type
+    <set >
+      <if test="province != null" >
+        province = #{province,jdbcType=VARCHAR},
+      </if>
+      <if test="city != null" >
+        city = #{city,jdbcType=VARCHAR},
+      </if>
+      <if test="typeName != null" >
+        type_name = #{typeName,jdbcType=VARCHAR},
+      </if>
+      <if test="userServiceAccount != null" >
+        user_service_account = #{userServiceAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.ahdms.billing.model.BoxType" >
+    update box_type
+    set province = #{province,jdbcType=VARCHAR},
+      city = #{city,jdbcType=VARCHAR},
+      type_name = #{typeName,jdbcType=VARCHAR},
+      user_service_account = #{userServiceAccount,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  
+  <!-- query -->
+	<select id="pageQuery" parameterType="java.util.Map" resultMap="BaseResultMap">
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM box_type
+		<where>
+			<if test="province != null">
+				and province = #{province, jdbcType=VARCHAR}
+			</if>
+			<if test="city != null">
+				and city = #{city, jdbcType=VARCHAR}
+			</if>
+			<if test="typeName != null">
+				and type_name = #{typeName, jdbcType=VARCHAR}
+			</if> 
+		</where>
+		order by create_time desc
+	</select>
+	
+	<select id="selectAll" resultMap="BaseResultMap" >
+    select 
+    id, province, city, type_name,user_service_account
+    from box_type 
+  </select>
+</mapper>

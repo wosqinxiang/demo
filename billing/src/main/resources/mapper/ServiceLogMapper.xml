@@ -1,0 +1,342 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ahdms.billing.dao.ServiceLogMapper">
+  <resultMap id="BaseResultMap" type="com.ahdms.billing.model.ServiceLog">
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="operationTime" jdbcType="TIMESTAMP" property="operationtime" />
+    <result column="username" jdbcType="VARCHAR" property="username" />
+    <result column="type_id" jdbcType="VARCHAR" property="typeId" />
+    <result column="service_encode" jdbcType="VARCHAR" property="serviceEncode" />
+    <result column="channel_encode" jdbcType="VARCHAR" property="channelEncode" />
+    <result column="result" jdbcType="INTEGER" property="result" />
+    <result column="message" jdbcType="VARCHAR" property="message" />
+    <result column="serial_num" jdbcType="VARCHAR" property="serialNum" />
+    <result column="special_code" jdbcType="VARCHAR" property="specialCode" />
+    <result column="comment" jdbcType="VARCHAR" property="comment" />
+
+    <association property="serviceType"
+                 javaType="com.ahdms.billing.model.ServiceType"
+                 select="com.ahdms.billing.dao.ServiceTypeMapper.queryServiceTypeById"
+                 column="type_id">
+    </association>
+
+    <association property="serviceInfo"
+                 javaType="com.ahdms.billing.model.ServiceInfo"
+                 select="com.ahdms.billing.dao.ServiceInfoMapper.queryByServiceEncode"
+                 column="service_encode">
+    </association>
+
+    <association property="channelInfo"
+                 javaType="com.ahdms.billing.model.ChannelInfo"
+                 select="com.ahdms.billing.dao.ChannelInfoMapper.queryByChannelEncode"
+                 column="channel_encode">
+    </association>
+
+  </resultMap>
+  <resultMap id="ServiceLogForUserServiceData" type="com.ahdms.billing.model.report.ServiceLogForUserServiceData">
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="user_info_id" jdbcType="VARCHAR" property="userInfoId" />
+    <result column="service_encode" jdbcType="VARCHAR" property="serviceId" />
+    <result column="special_code" jdbcType="VARCHAR" property="specialCode" />
+    <result column="service_count" jdbcType="INTEGER" property="serviceCount" />
+    <result column="end_time" jdbcType="TIMESTAMP" property="endTime" />
+    <result column="tps" jdbcType="INTEGER" property="tps" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="provider" jdbcType="VARCHAR" property="provider" />
+    <result column="count" jdbcType="INTEGER" property="count" />
+    <result column="channel_encode" jdbcType="VARCHAR" property="channelEncode" />
+</resultMap>
+
+  <resultMap id="ompLogsResult" type="com.ahdms.billing.model.report.ServiceLogForUserServiceData">
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="user_info_id" jdbcType="VARCHAR" property="userInfoId" />
+    <result column="service_encode" jdbcType="VARCHAR" property="serviceId" />
+    <result column="special_code" jdbcType="VARCHAR" property="specialCode" />
+    <result column="service_count" jdbcType="INTEGER" property="serviceCount" />
+    <result column="end_time" jdbcType="TIMESTAMP" property="endTime" />
+    <result column="tps" jdbcType="INTEGER" property="tps" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="provider" jdbcType="VARCHAR" property="provider" />
+    <result column="count" jdbcType="INTEGER" property="count" />
+    <result column="channel_encode" jdbcType="VARCHAR" property="channelEncode" />
+  </resultMap>
+
+  <sql id="Base_Column_List">
+    id, operationTime , username, type_id, service_encode, channel_encode, result, message, serial_num,special_code,comment
+  </sql>
+
+  <select id="getLogs" parameterType="com.ahdms.billing.vo.omp.ServiceLogPageReqVo"
+          resultType="com.ahdms.billing.vo.omp.ServiceLogVo">
+    SELECT
+      u.id customerId,
+      s.username companyName,
+      s.service_encode productCode,
+      s.operationTime,
+      s.result,
+      s.message,
+      s.serial_num serialNum,
+      i.service_name productName,
+      i.id productId
+    FROM
+      service_log s,
+      service_info i,
+      user_info u
+    WHERE
+      s.service_encode = i.service_encode
+    and s.username = u.username
+    and u.type = 1
+      <if test="queryVo.startDate != null">
+        <![CDATA[and s.operationTime >= #{queryVo.startDate}]]>
+      </if>
+      <if test="queryVo.endDate != null">
+        <![CDATA[and s.operationTime <= #{queryVo.endDate}]]>
+      </if>
+
+    order by s.operationTime asc
+
+  </select>
+
+
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from service_log
+    where id = #{id,jdbcType=VARCHAR}
+
+  </select>
+
+  <select id="queryServiceLogByDateAndUser" parameterType="java.lang.String" resultMap="ServiceLogForUserServiceData">
+    SELECT us.*,sl.count,ui.username,sl.channel_encode FROM (SELECT *,count(service_encode) count FROM service_log 
+    where username=#{username,jdbcType=VARCHAR}
+    <if test="dateStr != null and dateStr != '' ">
+        and DATE_FORMAT(operationTime, '%Y-%m-%d') = #{dateStr,jdbcType=VARCHAR}
+      </if>
+      <if test="monthStr != null and monthStr != '' ">
+        and DATE_FORMAT(operationTime, '%Y-%m') = #{monthStr,jdbcType=VARCHAR}
+      </if>
+    GROUP BY service_encode,channel_encode)
+ sl,user_service us,user_info ui WHERE sl.service_encode=us.service_encode
+	AND ui.id=us.user_info_id AND sl.username=ui.username 
+	  <if test="dateStr != null and dateStr != '' ">
+        and DATE_FORMAT(sl.operationTime, '%Y-%m-%d') = #{dateStr,jdbcType=VARCHAR}
+      </if>
+      <if test="monthStr != null and monthStr != '' ">
+        and DATE_FORMAT(sl.operationTime, '%Y-%m') = #{monthStr,jdbcType=VARCHAR}
+      </if>
+	AND ui.username=#{username,jdbcType=VARCHAR}
+  </select>
+
+<select id="queryServiceLogByDate" parameterType="java.lang.String" resultMap="ServiceLogForUserServiceData">
+    SELECT us.*,sl.count,ui.username,sl.channel_encode FROM (
+    SELECT *,count(service_encode) count FROM service_log
+    <where>
+    <if test="dateStr != null and dateStr != '' ">
+        and DATE_FORMAT(operationTime, '%Y-%m-%d') = #{dateStr,jdbcType=VARCHAR}
+      </if>
+      <if test="monthStr != null and monthStr != '' ">
+        and DATE_FORMAT(operationTime, '%Y-%m') = #{monthStr,jdbcType=VARCHAR}
+      </if>
+      </where>
+    GROUP BY service_encode,channel_encode)
+ sl,user_service us,user_info ui WHERE sl.service_encode=us.service_encode
+AND ui.id=us.user_info_id AND sl.username=ui.username 
+	<if test="dateStr != null and dateStr != '' ">
+        and DATE_FORMAT(sl.operationTime, '%Y-%m-%d') = #{dateStr,jdbcType=VARCHAR}
+      </if>
+      <if test="monthStr != null and monthStr != '' ">
+        and DATE_FORMAT(sl.operationTime, '%Y-%m') = #{monthStr,jdbcType=VARCHAR}
+      </if>
+  </select>
+  
+   <select id="countByServiceLogQuery" parameterType="com.ahdms.billing.model.ServiceLogQuery" resultType="java.lang.Integer">
+    select 
+    count(*)
+    from service_log
+    <where>
+      <if test="username != null and username !='' ">
+        and username = #{username,jdbcType=VARCHAR}
+      </if>
+      <if test="typeId != null and typeId != '' ">
+        and type_id = #{typeId,jdbcType=VARCHAR}
+      </if>
+      <if test="serviceEncode != null and serviceEncode != '' ">
+        and service_encode = #{serviceEncode,jdbcType=VARCHAR}
+      </if>
+      <if test="channelEncode != null and channelEncode != '' ">
+        and channel_encode = #{channelEncode,jdbcType=VARCHAR}
+      </if>
+      <if test="dateStr != null and dateStr != '' ">
+        and DATE_FORMAT(operationTime, '%Y-%m-%d') = #{dateStr,jdbcType=VARCHAR}
+      </if>
+      <if test="monthStr != null and monthStr != '' ">
+        and DATE_FORMAT(operationTime, '%Y-%m') = #{monthStr,jdbcType=VARCHAR}
+      </if>
+    </where>
+  </select>
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from service_log
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.ahdms.billing.model.ServiceLog">
+    insert into service_log (id, operationTime, username, 
+      type_id, service_encode, channel_encode,
+      result, message, serial_num,special_code,comment)
+    values (#{id,jdbcType=VARCHAR}, #{operationtime,jdbcType=TIMESTAMP}, #{username,jdbcType=VARCHAR},
+      #{typeId,jdbcType=VARCHAR}, #{serviceEncode,jdbcType=VARCHAR}, #{channelEncode,jdbcType=VARCHAR},
+      #{result,jdbcType=INTEGER}, #{message,jdbcType=VARCHAR},#{serialNum,jdbcType=VARCHAR},
+      #{specialCode,jdbcType=VARCHAR},#{comment,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.ahdms.billing.model.ServiceLog">
+    insert into service_log
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="operationtime != null">
+        operationTime,
+      </if>
+      <if test="username != null">
+        username,
+      </if>
+      <if test="typeId != null">
+        type_id,
+      </if>
+      <if test="serviceEncode != null">
+        service_encode,
+      </if>
+      <if test="channelEncode != null">
+        channel_encode,
+      </if>
+      <if test="result != null">
+        result,
+      </if>
+      <if test="message != null">
+        message,
+      </if>
+      <if test="serialNum != null">
+        serial_num,
+      </if>
+      <if test="specialCode != null">
+        special_code,
+      </if>
+      <if test="comment != null">
+        comment,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="operationtime != null">
+        #{operationtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="username != null">
+        #{username,jdbcType=VARCHAR},
+      </if>
+      <if test="typeId != null">
+        #{typeId,jdbcType=VARCHAR},
+      </if>
+      <if test="serviceEncode != null">
+        #{serviceEncode,jdbcType=VARCHAR},
+      </if>
+      <if test="channelEncode != null">
+        #{channelEncode,jdbcType=VARCHAR},
+      </if>
+      <if test="result != null">
+        #{result,jdbcType=INTEGER},
+      </if>
+      <if test="message != null">
+        #{message,jdbcType=VARCHAR},
+      </if>
+      <if test="serialNum != null">
+        #{serialNum,jdbcType=VARCHAR},
+      </if>
+      <if test="specialCode != null">
+        #{specialCode,jdbcType=VARCHAR},
+      </if>
+      <if test="comment != null">
+        #{comment,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.ahdms.billing.model.ServiceLog">
+    update service_log
+    <set>
+      <if test="operationtime != null">
+        operationTime = #{operationtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="username != null">
+        username = #{username,jdbcType=VARCHAR},
+      </if>
+      <if test="typeId != null">
+        type_id = #{typeId,jdbcType=VARCHAR},
+      </if>
+      <if test="serviceEncode != null">
+        service_name = #{serviceEncode,jdbcType=VARCHAR},
+      </if>
+      <if test="channelEncode != null">
+        channel_encode = #{channelEncode,jdbcType=VARCHAR},
+      </if>
+      <if test="result != null">
+        result = #{result,jdbcType=INTEGER},
+      </if>
+      <if test="message != null">
+        message = #{message,jdbcType=VARCHAR},
+      </if>
+      <if test="serialNum != null">
+        #{serialNum,jdbcType=VARCHAR},
+      </if>
+      <if test="comment != null">
+        #{comment,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.ahdms.billing.model.ServiceLog">
+    update service_log
+    set operationTime = #{operationtime,jdbcType=TIMESTAMP},
+      username = #{username,jdbcType=VARCHAR},
+      type_id = #{typeId,jdbcType=VARCHAR},
+      service_encode = #{serviceEncode,jdbcType=VARCHAR},
+      channel_encode = #{channelEncode,jdbcType=VARCHAR},
+      result = #{result,jdbcType=INTEGER},
+      message = #{message,jdbcType=VARCHAR},
+      comment = #{comment,jdbcType=VARCHAR},
+      serial_num = #{serialNum,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <select id="findAll" parameterType="com.ahdms.billing.model.ServiceLogQuery" resultMap="BaseResultMap">
+    select serviceLog.id,
+           serviceLog.type_id,
+           serviceLog.service_encode,
+           serviceLog.username,
+           serviceLog.operationTime,
+           serviceLog.channel_encode,
+           serviceLog.result,
+           serviceLog.message,
+           serviceLog.serial_num
+     from service_log serviceLog
+    <where>
+      <if test="beginDate != null">
+        <![CDATA[and DATE_FORMAT(operationtime,'%Y-%m-%d')>=DATE_FORMAT(#{beginDate},'%Y-%m-%d')]]>
+      </if>
+      <if test="endDate != null">
+        <![CDATA[and DATE_FORMAT(operationtime,'%Y-%m-%d')<=DATE_FORMAT(#{endDate},'%Y-%m-%d')]]>
+      </if>
+      <if test="username!= null and username !='' ">
+        and serviceLog.username = #{username,jdbcType=VARCHAR}
+      </if>
+      <if test="typeId!= null and typeId != '' ">
+        and serviceLog.type_id = #{typeId,jdbcType=VARCHAR}
+      </if>
+      <if test="serviceEncode!= null and serviceEncode != '' ">
+        and serviceLog.service_encode = #{serviceEncode,jdbcType=VARCHAR}
+      </if>
+      <if test="channelEncode!= null and channelEncode != '' ">
+        and serviceLog.channel_encode = #{channelEncode,jdbcType=VARCHAR}
+      </if>
+    </where>
+     order by operationtime desc
+  </select>
+</mapper>

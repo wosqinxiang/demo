@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ahdms.billing.dao.ProviderInfoMapper" >
+  <resultMap id="BaseResultMap" type="com.ahdms.billing.model.ProviderInfo" >
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="provider_name" property="providerName" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, provider_name
+  </sql>
+  
+  <select id="getProviderByServiceId" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select p.* from specialline_serviceinfo ssi,special_line_info si,provider_info p 
+    where 
+    ssi.service_info_id = #{serviceId,jdbcType=VARCHAR} 
+    and ssi.special_line_id = si.id 
+    and si.provider_id = p.id
+    GROUP BY p.id
+  </select>
+  
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from provider_info
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from provider_info
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.ahdms.billing.model.ProviderInfo" >
+    insert into provider_info (id, provider_name)
+    values (#{id,jdbcType=VARCHAR}, #{providerName,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.ahdms.billing.model.ProviderInfo" >
+    insert into provider_info
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="providerName != null" >
+        provider_name,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="providerName != null" >
+        #{providerName,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.ahdms.billing.model.ProviderInfo" >
+    update provider_info
+    <set >
+      <if test="providerName != null" >
+        provider_name = #{providerName,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.ahdms.billing.model.ProviderInfo" >
+    update provider_info
+    set provider_name = #{providerName,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  
+  <select id="queryProviderInfoPageList" parameterType="java.util.Map" resultMap="BaseResultMap">
+  	select
+  	<include refid="Base_Column_List"/>
+  	from 
+  	provider_info
+  	<where>
+  	<if test="providerName != null">
+  		 provider_name = #{providerName,jdbcType=VARCHAR}
+  	</if>
+  	</where> 
+  </select>
+  
+  
+  <select id="queryByName" parameterType="java.lang.String" resultMap="BaseResultMap">
+  	select
+  	<include refid="Base_Column_List"/>
+  	from 
+  	provider_info where provider_name = #{providerName,jdbcType=VARCHAR}
+  </select>
+  
+  <select id="getProvider" resultMap="BaseResultMap">
+ 	select
+  	<include refid="Base_Column_List"/> from provider_info
+  </select>
+</mapper>

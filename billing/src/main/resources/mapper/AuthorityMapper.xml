@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<!-- AUDIT_LOG -->
+<mapper namespace="com.ahdms.billing.dao.AuthorityDao">
+	<resultMap id="retMap" type="com.ahdms.billing.model.Authority">
+		<id column="id" property="id" jdbcType="VARCHAR" />
+		<result column="user_id" property="userId" jdbcType="VARCHAR" />
+		<result column="authority" property="authority" jdbcType="VARCHAR" />
+	</resultMap>
+	<sql id="retList">
+		id, user_id, authority
+	</sql>
+
+	<select id="queryById" parameterType="java.lang.String"
+		resultMap="retMap">
+		select
+		<include refid="retList" />
+		from authority where id=#{0}
+	</select>
+
+	<select id="queryByuserId" parameterType="java.lang.String"
+		resultMap="retMap">
+		select
+		<include refid="retList" />
+		from authority where user_id=#{0}
+	</select>
+
+	<select id="selectByOpId" resultMap="retMap" parameterType="java.lang.String">
+		select
+		<include refid="retList" />
+		from authority
+		where user_id = #{0}
+	</select>
+
+	<insert id="insert" parameterType="com.ahdms.billing.model.Authority">
+		insert into authority(id,
+		user_id, authority)
+		values(#{id}, #{userId}, #{authority})
+	</insert>
+
+	<delete id="deleteByUserIdAndAuthority" parameterType="java.util.Map">
+		delete
+		from authority where user_id = #{userId} and authority = #{authority}
+	</delete>
+
+	<delete id="deleteByUserId" parameterType="java.lang.String">
+		delete from authority
+		where user_id = #{0}
+	</delete> 
+</mapper>

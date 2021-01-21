@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ahdms.billing.dao.SpeciallineServiceinfoMapper">
+  <resultMap id="BaseResultMap" type="com.ahdms.billing.model.SpeciallineServiceinfo">
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="special_line_id" jdbcType="VARCHAR" property="specialLineId" />
+    <result column="service_info_id" jdbcType="VARCHAR" property="serviceInfoId" />
+  </resultMap>
+  
+  <resultMap id="VOResultMap" type="com.ahdms.billing.vo.SpecialLineServiceVO">
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="service_name" jdbcType="VARCHAR" property="serviceName" />
+    <result column="service_encode" jdbcType="VARCHAR" property="serviceCode" />
+    <result column="service_info_id" jdbcType="VARCHAR" property="serviceId" />
+  </resultMap>
+  
+  <sql id="Base_Column_List">
+    id, special_line_id, service_info_id
+  </sql>
+  
+   <select id="findSpecialLineService" parameterType="java.lang.String" resultMap="VOResultMap">
+    select s.service_name,s.service_encode,ss.id,ss.service_info_id 
+    from service_info s,specialline_serviceinfo ss 
+    where ss.special_line_id = #{specialLineId,jdbcType=VARCHAR} and ss.service_info_id = s.id;
+  </select>
+  
+   <select id="selectBySpecialIdAndServiceId" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from specialline_serviceinfo
+    where special_line_id = #{specialId,jdbcType=VARCHAR} and 
+    service_info_id = #{serviceId,jdbcType=VARCHAR}
+  </select>
+  
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from specialline_serviceinfo
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from specialline_serviceinfo
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.ahdms.billing.model.SpeciallineServiceinfo">
+    insert into specialline_serviceinfo (id, special_line_id, service_info_id
+      )
+    values (#{id,jdbcType=VARCHAR}, #{specialLineId,jdbcType=VARCHAR}, #{serviceInfoId,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.ahdms.billing.model.SpeciallineServiceinfo">
+    insert into specialline_serviceinfo
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="specialLineId != null">
+        special_line_id,
+      </if>
+      <if test="serviceInfoId != null">
+        service_info_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="specialLineId != null">
+        #{specialLineId,jdbcType=VARCHAR},
+      </if>
+      <if test="serviceInfoId != null">
+        #{serviceInfoId,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.ahdms.billing.model.SpeciallineServiceinfo">
+    update specialline_serviceinfo
+    <set>
+      <if test="specialLineId != null">
+        special_line_id = #{specialLineId,jdbcType=VARCHAR},
+      </if>
+      <if test="serviceInfoId != null">
+        service_info_id = #{serviceInfoId,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.ahdms.billing.model.SpeciallineServiceinfo">
+    update specialline_serviceinfo
+    set special_line_id = #{specialLineId,jdbcType=VARCHAR},
+      service_info_id = #{serviceInfoId,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>

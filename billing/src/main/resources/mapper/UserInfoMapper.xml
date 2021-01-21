@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ahdms.billing.dao.UserInfoMapper">
+  <resultMap id="BaseResultMap" type="com.ahdms.billing.model.UserInfo">
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="username" jdbcType="VARCHAR" property="username" />
+    <result column="service_account" jdbcType="VARCHAR" property="serviceAccount" />
+    <result column="service_pwd" jdbcType="VARCHAR" property="servicePwd" />
+    <result column="user_account" jdbcType="VARCHAR" property="userAccount" />
+    <result column="user_pwd" jdbcType="VARCHAR" property="userPwd" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="salt" jdbcType="VARCHAR" property="salt" />
+  </resultMap>
+  <resultMap id="BaseResultMapForService" type="com.ahdms.billing.model.UserInfoForService">
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="username" jdbcType="VARCHAR" property="username" />
+    <result column="service_account" jdbcType="VARCHAR" property="serviceAccount" />
+    <result column="service_pwd" jdbcType="VARCHAR" property="servicePwd" />
+    <result column="user_account" jdbcType="VARCHAR" property="userAccount" />
+    <result column="user_pwd" jdbcType="VARCHAR" property="userPwd" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="salt" jdbcType="VARCHAR" property="salt" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, username, service_account, service_pwd, user_account, user_pwd, 
+    status, salt
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from user_info
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from user_info
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.ahdms.billing.model.UserInfo">
+    insert into user_info (id, username, service_account, 
+      service_pwd, 
+      user_account, user_pwd, status, 
+      salt)
+    values (#{id,jdbcType=VARCHAR}, #{username,jdbcType=VARCHAR}, #{serviceAccount,jdbcType=VARCHAR}, 
+      #{servicePwd,jdbcType=VARCHAR}, 
+      #{userAccount,jdbcType=VARCHAR}, #{userPwd,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}, 
+      #{salt,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.ahdms.billing.model.UserInfo">
+    insert into user_info
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="username != null">
+        username,
+      </if>
+      <if test="serviceAccount != null">
+        service_account,
+      </if>
+      <if test="servicePwd != null">
+        service_pwd,
+      </if>
+      <if test="userAccount != null">
+        user_account,
+      </if>
+      <if test="userPwd != null">
+        user_pwd,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="salt != null">
+        salt,
+      </if>
+      <if test="type != null">
+        type,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="username != null">
+        #{username,jdbcType=VARCHAR},
+      </if>
+      <if test="serviceAccount != null">
+        #{serviceAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="servicePwd != null">
+        #{servicePwd,jdbcType=VARCHAR},
+      </if>
+      <if test="userAccount != null">
+        #{userAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="userPwd != null">
+        #{userPwd,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="salt != null">
+        #{salt,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null">
+        #{type,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.ahdms.billing.model.UserInfo">
+    update user_info
+    <set>
+      <if test="username != null">
+        username = #{username,jdbcType=VARCHAR},
+      </if>
+      <if test="serviceAccount != null">
+        service_account = #{serviceAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="servicePwd != null">
+        service_pwd = #{servicePwd,jdbcType=VARCHAR},
+      </if>
+      <if test="userAccount != null">
+        user_account = #{userAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="userPwd != null">
+        user_pwd = #{userPwd,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="salt != null">
+        salt = #{salt,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.ahdms.billing.model.UserInfo">
+    update user_info
+    set username = #{username,jdbcType=VARCHAR},
+      service_account = #{serviceAccount,jdbcType=VARCHAR},
+      service_pwd = #{servicePwd,jdbcType=VARCHAR},
+      user_account = #{userAccount,jdbcType=VARCHAR},
+      user_pwd = #{userPwd,jdbcType=VARCHAR},
+      status = #{status,jdbcType=INTEGER},
+      salt = #{salt,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+
+  <select id="findAll" parameterType="com.ahdms.billing.model.UserInfo" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from user_info
+  </select>
+  <select id="queryAll" parameterType="com.ahdms.billing.model.UserInfo" resultMap="BaseResultMapForService">
+    select
+    <include refid="Base_Column_List" />
+    from user_info
+  </select>
+
+  <select id="selectByUsernameAndPassword" parameterType="com.ahdms.billing.model.UserInfo" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from user_info
+    where user_account = #{username} and user_pwd = #{password}
+  </select>
+
+  <select id="selectByUsername" parameterType="com.ahdms.billing.model.UserInfo" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from user_info
+    where user_account = #{username}
+  </select>
+
+  <select id="selectUSerId"  parameterType="java.lang.String" resultType="java.lang.String">
+    select id from user_info
+    <where>
+      <if test="serviceAccount != null">
+        service_account = #{serviceAccount,jdbcType=VARCHAR}
+      </if>
+    </where>
+  </select>
+
+  <select id="selectLikeUserName" parameterType="java.lang.String" resultMap="BaseResultMapForService">
+    select
+    <include refid="Base_Column_List" />
+    from user_info
+    <where>
+        <if test="username != null and username != ''">
+       username like concat('%',#{username},'%')
+      </if>
+    </where>
+  </select>
+  
+   <select id="selectByUsernameOrUserAccountOrServiceAccount" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from user_info where
+       username = #{username} or 
+       service_account = #{serviceAccount} or 
+       user_account = #{userAccount}
+  </select>
+  
+   <select id="selectByServiceAccount" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from user_info where
+       service_account = #{serviceAccount}
+  </select>
+
+  <select id="selectByServiceInfo" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from user_info where
+    service_account = #{serviceAccount} and service_pwd = #{servicePwd,jdbcType=VARCHAR}
+  </select>
+  
+</mapper>

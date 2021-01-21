@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ahdms.billing.dao.AdminUserInfoMapper">
+	<resultMap id="BaseResultMap"
+		type="com.ahdms.billing.model.AdminUserInfo">
+		<id column="id" jdbcType="VARCHAR" property="id" />
+		<result column="username" jdbcType="VARCHAR"
+			property="username" />
+		<result column="password" jdbcType="VARCHAR"
+			property="password" />
+		<result column="salt" jdbcType="VARCHAR" property="salt" />
+		<result column="auth_id" jdbcType="INTEGER" property="authId" />
+		<result column="is_lock" jdbcType="INTEGER" property="isLock" />
+	</resultMap>
+
+	<resultMap id="AdminUserInfoVO"
+		type="com.ahdms.billing.vo.AdminUserInfoVO">
+		<id column="id" jdbcType="VARCHAR" property="id" />
+		<result column="username" jdbcType="VARCHAR"
+			property="username" />
+		<result column="password" jdbcType="VARCHAR"
+			property="password" />
+		<result column="salt" jdbcType="VARCHAR" property="salt" />
+		<result column="auth_id" jdbcType="INTEGER" property="authId" />
+		<result column="is_lock" jdbcType="INTEGER" property="isLock" />
+		<result column="authority" jdbcType="VARCHAR"
+			property="authority" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		id, username, password, salt, auth_id, is_lock
+	</sql>
+	<sql id="AdminUserInfoVO_Column_List">
+		id, username, password, salt, auth_id, is_lock,authority
+	</sql>
+	<select id="selectByPrimaryKey" parameterType="java.lang.String"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from admin_user_info
+		where id = #{id,jdbcType=VARCHAR}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+		delete from admin_user_info
+		where id = #{id,jdbcType=VARCHAR}
+	</delete>
+	<insert id="insert"
+		parameterType="com.ahdms.billing.model.AdminUserInfo">
+		insert into admin_user_info (id, username, password,
+		salt, auth_id, is_lock
+		)
+		values (#{id,jdbcType=VARCHAR}, #{username,jdbcType=VARCHAR},
+		#{password,jdbcType=VARCHAR},
+		#{salt,jdbcType=VARCHAR}, #{authId,jdbcType=INTEGER}, #{isLock,jdbcType=INTEGER}
+		)
+	</insert>
+	<insert id="insertSelective"
+		parameterType="com.ahdms.billing.model.AdminUserInfo">
+		insert into admin_user_info
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="username != null">
+				username,
+			</if>
+			<if test="password != null">
+				password,
+			</if>
+			<if test="salt != null">
+				salt,
+			</if>
+			<if test="authId != null">
+				auth_id,
+			</if>
+			<if test="isLock != null">
+				is_lock,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=VARCHAR},
+			</if>
+			<if test="username != null">
+				#{username,jdbcType=VARCHAR},
+			</if>
+			<if test="password != null">
+				#{password,jdbcType=VARCHAR},
+			</if>
+			<if test="salt != null">
+				#{salt,jdbcType=VARCHAR},
+			</if>
+			<if test="authId != null">
+				#{authId,jdbcType=INTEGER},
+			</if>
+			<if test="isLock != null">
+				#{isLock,jdbcType=INTEGER},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective"
+		parameterType="com.ahdms.billing.model.AdminUserInfo">
+		update admin_user_info
+		<set>
+			<if test="username != null">
+				username = #{username,jdbcType=VARCHAR},
+			</if>
+			<if test="password != null">
+				password = #{password,jdbcType=VARCHAR},
+			</if>
+			<if test="salt != null">
+				salt = #{salt,jdbcType=VARCHAR},
+			</if>
+			<if test="authId != null">
+				auth_id = #{authId,jdbcType=INTEGER},
+			</if>
+			<if test="isLock != null">
+				is_lock = #{isLock,jdbcType=INTEGER},
+			</if>
+		</set>
+		where id = #{id,jdbcType=VARCHAR}
+	</update>
+	<update id="updateByPrimaryKey"
+		parameterType="com.ahdms.billing.model.AdminUserInfo">
+		update admin_user_info
+		set username = #{username,jdbcType=VARCHAR},
+		password = #{password,jdbcType=VARCHAR},
+		salt = #{salt,jdbcType=VARCHAR},
+		auth_id = #{authId,jdbcType=INTEGER},
+		is_lock = #{isLock,jdbcType=INTEGER}
+		where id = #{id,jdbcType=VARCHAR}
+	</update>
+	<select id="findAll"
+		resultType="com.ahdms.billing.model.AdminUserInfo"
+		resultMap="BaseResultMap">
+		select * from admin_user_info
+	</select>
+
+	<select id="querySysUserByUserName"
+		resultType="com.ahdms.billing.model.AdminUserInfo"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from admin_user_info
+		where username = #{userName,jdbcType=VARCHAR}
+
+	</select>
+
+	<select id="querySysUserPageList" resultMap="AdminUserInfoVO">
+		SELECT
+			a.id ,a.username ,b.authority,a.is_lock
+		FROM
+			admin_user_info AS a,
+			authorities AS b
+		WHERE
+			a.auth_id = b.id
+	</select>
+
+	<select id="querySuperAdmin" parameterType="java.lang.String"
+		resultType="java.lang.Integer">
+		SELECT
+			count(0)
+		FROM
+			admin_user_info AS aui,
+			authority AS a
+		WHERE
+			aui.id = a.user_id
+			AND a.authority = "ROLE_SUPER_ADMIN"
+	</select>
+
+	<select id="selectById" parameterType="java.lang.String"
+		resultType="java.lang.String">
+		SELECT
+		a.authority
+		FROM
+		admin_user_info AS aui,
+		authority AS a
+		WHERE
+		aui.id = a.user_id
+		AND aui.id = #{0}
+	</select>
+
+	<update id="lockUser" parameterType="java.lang.String">
+		update admin_user_info set is_lock = 1 where username =
+		#{userName,jdbcType=VARCHAR}
+	</update>
+
+	<select id="selectAllByKey" parameterType="java.lang.String"
+		resultMap="AdminUserInfoVO">
+		SELECT
+		a.id ,a.username ,b.authority
+		FROM
+		admin_user_info AS a,
+		authorities AS b
+		WHERE
+		a.auth_id = b.id
+		AND a.id = #{0};
+	</select>
+</mapper>

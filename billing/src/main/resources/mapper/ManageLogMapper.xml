@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ahdms.billing.dao.ManageLogMapper">
+  <resultMap id="BaseResultMap" type="com.ahdms.billing.model.ManageLog">
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="operator" jdbcType="VARCHAR" property="operator" />
+    <result column="comment" jdbcType="VARCHAR" property="comment" />
+    <result column="operationTime" jdbcType="TIMESTAMP" property="operationtime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, operator, comment, operationTime
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from manage_log
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from manage_log
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.ahdms.billing.model.ManageLog">
+    insert into manage_log (id, operator, comment, operationTime)
+    values (#{id,jdbcType=VARCHAR}, #{operator,jdbcType=VARCHAR}, #{comment,jdbcType=VARCHAR}, 
+      #{operationtime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.ahdms.billing.model.ManageLog">
+    insert into manage_log
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="operator != null">
+        operator,
+      </if>
+      <if test="comment != null">
+        comment,
+      </if>
+      <if test="operationtime != null">
+        operationTime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="operator != null">
+        #{operator,jdbcType=VARCHAR},
+      </if>
+      <if test="comment != null">
+        #{comment,jdbcType=VARCHAR},
+      </if>
+      <if test="operationtime != null">
+        #{operationtime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.ahdms.billing.model.ManageLog">
+    update manage_log
+    <set>
+      <if test="operator != null">
+        operator = #{operator,jdbcType=VARCHAR},
+      </if>
+      <if test="comment != null">
+        comment = #{comment,jdbcType=VARCHAR},
+      </if>
+      <if test="operationtime != null">
+        operationTime = #{operationtime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.ahdms.billing.model.ManageLog">
+    update manage_log
+    set operator = #{operator,jdbcType=VARCHAR},
+      comment = #{comment,jdbcType=VARCHAR},
+      operationTime = #{operationtime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <select id="findAll" parameterType="com.ahdms.billing.model.ManageLogQuery" resultMap="BaseResultMap">
+    select * from manage_log
+    <where>
+      <if test="beginDate != null">
+        <![CDATA[and DATE_FORMAT(operationtime,'%Y-%m-%d')>=DATE_FORMAT(#{beginDate},'%Y-%m-%d')]]>
+      </if>
+      <if test="endDate != null">
+        <![CDATA[and DATE_FORMAT(operationtime,'%Y-%m-%d')<=DATE_FORMAT(#{endDate},'%Y-%m-%d')]]>
+      </if>
+      <if test="operator!= null and operator !='' ">
+        and operator = #{operator,jdbcType=VARCHAR}
+      </if>
+    </where>
+     order by operationtime desc
+  </select>
+
+</mapper>

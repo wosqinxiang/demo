@@ -1,0 +1,281 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ahdms.billing.dao.UserServiceMapper">
+  <resultMap id="BaseResultMap" type="com.ahdms.billing.model.UserService">
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="user_info_id" jdbcType="VARCHAR" property="userInfoId" />
+    <result column="service_encode" jdbcType="VARCHAR" property="serviceId" />
+    <result column="special_code" jdbcType="VARCHAR" property="specialCode" />
+    <result column="service_count" jdbcType="INTEGER" property="serviceCount" />
+    <result column="end_time" jdbcType="TIMESTAMP" property="endTime" />
+    <result column="tps" jdbcType="INTEGER" property="tps" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="provider" jdbcType="VARCHAR" property="provider" />
+
+    <association property="serviceInfo"
+                 javaType="com.ahdms.billing.model.ServiceInfo"
+                 select="com.ahdms.billing.dao.ServiceInfoMapper.queryByServiceEncode"
+                 column="service_encode">
+    </association>
+
+    <association property="channelInfo"
+                 javaType="com.ahdms.billing.model.ChannelInfo"
+                 select="com.ahdms.billing.dao.ChannelInfoMapper.queryByChannelEncode"
+                 column="channel_encode">
+    </association>
+
+  </resultMap>
+  <resultMap id="BaseResultMapForName" type="com.ahdms.billing.model.UserServiceForName">
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="user_info_id" jdbcType="VARCHAR" property="userInfoId" />
+    <result column="service_encode" jdbcType="VARCHAR" property="serviceId" />
+    <result column="special_code" jdbcType="VARCHAR" property="specialCode" />
+    <result column="service_count" jdbcType="INTEGER" property="serviceCount" />
+    <result column="end_time" jdbcType="TIMESTAMP" property="endTime" />
+    <result column="tps" jdbcType="INTEGER" property="tps" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="provider" jdbcType="VARCHAR" property="provider" />
+  </resultMap>
+  <resultMap id="BaseResultMapForChannel" type="com.ahdms.billing.model.report.UserServiceForChannel">
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="user_info_id" jdbcType="VARCHAR" property="userInfoId" />
+    <result column="service_encode" jdbcType="VARCHAR" property="serviceId" />
+    <result column="special_code" jdbcType="VARCHAR" property="specialCode" />
+    <result column="service_count" jdbcType="INTEGER" property="serviceCount" />
+    <result column="end_time" jdbcType="TIMESTAMP" property="endTime" />
+    <result column="tps" jdbcType="INTEGER" property="tps" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="provider" jdbcType="VARCHAR" property="provider" />
+    <result column="sum_count" jdbcType="VARCHAR" property="sumCount" />
+  </resultMap>
+  <resultMap id="BaseResultSumCountMap" type="com.ahdms.billing.model.ServiceSumCount">
+    <id column="sum_id" jdbcType="VARCHAR" property="id" />
+    <result column="sum_count" jdbcType="INTEGER" property="count" />
+  </resultMap>
+  
+  <resultMap id="ResultMap1" type="com.ahdms.billing.vo.UserServiceDetailVO">
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="service_name" jdbcType="VARCHAR" property="serviceName" />
+    <!-- <result column="special_code" jdbcType="VARCHAR" property="specialCode" /> -->
+    <result column="service_count" jdbcType="INTEGER" property="serviceCount" />
+    <result column="end_time" jdbcType="TIMESTAMP" property="endTime" />
+    <result column="tps" jdbcType="INTEGER" property="tps" />
+    <result column="provider" jdbcType="VARCHAR" property="providerName" />
+    <result column="special_code" jdbcType="VARCHAR" property="specialName" />
+    <association property="serviceInfo"
+                 javaType="com.ahdms.billing.model.ServiceInfo"
+                 select="com.ahdms.billing.dao.ServiceInfoMapper.queryByServiceEncode"
+                 column="service_encode">
+    </association>
+
+    <association property="specialInfo"
+                 javaType="com.ahdms.billing.vo.SpecialLineVO"
+                 select="com.ahdms.billing.dao.SpecialLineInfoMapper.selectByCode"
+                 column="special_code">
+    </association>
+  </resultMap>
+  
+
+  <sql id="Base_Column_List">
+    id, user_info_id, service_encode, special_code, service_count, end_time, tps, create_time,provider,is_expired
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from user_service
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+
+  <select id="selectByUserIdAndServiceId" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from user_service
+    where user_info_id = #{userInfoId,jdbcType=VARCHAR} and 
+    service_encode = #{serviceId,jdbcType=VARCHAR}
+  </select>
+  
+  <select id="selectByUserId" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from user_service
+    where user_info_id = #{user_info_id,jdbcType=VARCHAR}
+  </select>
+
+  <select id="queryServiceDetailByUserId" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select
+    us.id,
+    us.user_info_id,
+    us.service_encode,
+    us.service_count,
+    us.end_time,
+    us.tps,
+    us.create_time,
+    us.provider
+    from user_service us,service_info si
+    where us.user_info_id = #{userId}
+    and si.service_type = #{typeId}
+    and us.service_encode = si.service_encode
+  </select>
+
+  <select id="queryByUserId" parameterType="java.lang.String" resultMap="BaseResultMapForName">
+    select
+    <include refid="Base_Column_List" />
+    from user_service
+    where user_info_id = #{user_info_id,jdbcType=VARCHAR}
+  </select>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from user_service
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.ahdms.billing.model.UserService">
+    insert into user_service (id, user_info_id, service_encode,
+      special_code, service_count, end_time,
+      tps, create_time,provider,is_expired)
+    values (#{id,jdbcType=VARCHAR}, #{userInfoId,jdbcType=VARCHAR}, #{serviceId,jdbcType=VARCHAR}, 
+      #{specialCode,jdbcType=VARCHAR}, #{serviceCount,jdbcType=INTEGER}, #{endTime,jdbcType=TIMESTAMP}, 
+      #{tps,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP},#{provider,jdbcType=VARCHAR},#{isExpired,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.ahdms.billing.model.UserService">
+    insert into user_service
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="userInfoId != null">
+        user_info_id,
+      </if>
+      <if test="serviceId != null">
+        service_encode,
+      </if>
+      <if test="specialCode != null">
+        special_code,
+      </if>
+      <if test="serviceCount != null">
+        service_count,
+      </if>
+      <if test="endTime != null">
+        end_time,
+      </if>
+      <if test="tps != null">
+        tps,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="provider != null">
+        provider,
+      </if>
+      <if test="isExpired != null">
+        is_expired,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="userInfoId != null">
+        #{userInfoId,jdbcType=VARCHAR},
+      </if>
+      <if test="serviceId != null">
+        #{serviceId,jdbcType=VARCHAR},
+      </if>
+      <if test="specialCode != null">
+        #{specialCode,jdbcType=VARCHAR},
+      </if>
+      <if test="serviceCount != null">
+        #{serviceCount,jdbcType=INTEGER},
+      </if>
+      <if test="endTime != null">
+        #{endTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="tps != null">
+        #{tps,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="provider != null">
+        #{provider,jdbcType=VARCHAR},
+      </if>
+       <if test="isExpired != null">
+        #{isExpired,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.ahdms.billing.model.UserService">
+    update user_service
+    <set>
+      <if test="userInfoId != null">
+        user_info_id = #{userInfoId,jdbcType=VARCHAR},
+      </if>
+      <if test="serviceId != null">
+        service_encode = #{serviceId,jdbcType=VARCHAR},
+      </if>
+      <if test="specialCode != null">
+        special_code = #{specialCode,jdbcType=VARCHAR},
+      </if>
+      <if test="serviceCount != null">
+        service_count = #{serviceCount,jdbcType=INTEGER},
+      </if>
+      <if test="endTime != null">
+        end_time = #{endTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="tps != null">
+        tps = #{tps,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="provider != null">
+        provider = #{provider,jdbcType=VARCHAR},
+      </if>
+       <if test="isExpired != null">
+        is_expired = #{isExpired,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.ahdms.billing.model.UserService">
+    update user_service
+    set user_info_id = #{userInfoId,jdbcType=VARCHAR},
+      service_encode = #{serviceId,jdbcType=VARCHAR},
+      special_code = #{specialCode,jdbcType=VARCHAR},
+      service_count = #{serviceCount,jdbcType=INTEGER},
+      end_time = #{endTime,jdbcType=TIMESTAMP},
+      tps = #{tps,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+       is_expired = #{isExpired,jdbcType=INTEGER},
+       provider = #{provider,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+
+
+  <select id="findAll" parameterType="com.ahdms.billing.model.UserService" resultMap="BaseResultMap">
+    select * from user_service
+  </select>
+
+  <select id="findAllOmpUser" parameterType="com.ahdms.billing.model.UserService" resultMap="BaseResultMap">
+    select s.* from user_info u,user_service s where u.id = s.user_info_id and u.type = 1;
+  </select>
+
+  <select id="findUserServiceForChannel" parameterType="com.ahdms.billing.model.UserService" resultMap="BaseResultMapForChannel">
+    SELECT *,SUM(service_count) sum_count FROM user_service GROUP BY service_encode,channel_encode
+  </select>
+
+  <select id="selectUserServiceCountByUserId" parameterType="java.lang.String" resultMap="BaseResultSumCountMap">
+    SELECT service_encode sum_id,SUM(service_count) sum_count FROM user_service WHERE user_info_id=#{user_id,jdbcType=VARCHAR} GROUP BY service_encode
+  </select>
+
+  <select id="selectUserServiceCountByServiceId" parameterType="java.lang.String" resultMap="BaseResultSumCountMap">
+    SELECT channel_encode sum_id,SUM(service_count) sum_count FROM user_service WHERE user_info_id=#{param1,jdbcType=VARCHAR} and service_encode=#{param2,jdbcType=VARCHAR} GROUP BY channel_encode
+  </select>
+  
+  
+  <select id="queryByUserIdAndType" parameterType="java.lang.String" resultMap="ResultMap1">
+    select us.* ,s.service_name from user_service us,service_info s where us.user_info_id = #{userInfoId}
+    and us.service_encode = s.service_encode and s.service_type = #{typeId} 
+  </select>
+  
+
+</mapper>

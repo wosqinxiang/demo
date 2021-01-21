@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ahdms.billing.dao.ServiceInfoMapper">
+  <resultMap id="BaseResultMap" type="com.ahdms.billing.model.ServiceInfo">
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="service_name" jdbcType="VARCHAR" property="serviceName" />
+    <result column="service_encode" jdbcType="VARCHAR" property="serviceEncode" />
+    <result column="service_type" jdbcType="VARCHAR" property="serviceType" />
+    <result column="type_name" jdbcType="VARCHAR" property="typeName" />
+    <result column="special_line_code" jdbcType="VARCHAR" property="specialLineCode" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, service_name, service_encode, service_type, special_line_code
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from service_info
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from service_info
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.ahdms.billing.model.ServiceInfo">
+    insert into service_info (id, service_name, service_encode, 
+      service_type)
+    values (#{id,jdbcType=VARCHAR}, #{serviceName,jdbcType=VARCHAR}, #{serviceEncode,jdbcType=VARCHAR}, 
+      #{serviceType,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.ahdms.billing.model.ServiceInfo">
+    insert into service_info
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="serviceName != null">
+        service_name,
+      </if>
+      <if test="serviceEncode != null">
+        service_encode,
+      </if>
+      <if test="serviceType != null">
+        service_type,
+      </if>
+      <if test="specialLineCode != null">
+        special_line_code,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="serviceName != null">
+        #{serviceName,jdbcType=VARCHAR},
+      </if>
+      <if test="serviceEncode != null">
+        #{serviceEncode,jdbcType=VARCHAR},
+      </if>
+      <if test="serviceType != null">
+        #{serviceType,jdbcType=VARCHAR},
+      </if>
+      <if test="specialLineCode != null">
+        #{specialLineCode,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.ahdms.billing.model.ServiceInfo">
+    update service_info
+    <set>
+      <if test="serviceName != null">
+        service_name = #{serviceName,jdbcType=VARCHAR},
+      </if>
+      <if test="serviceEncode != null">
+        service_encode = #{serviceEncode,jdbcType=VARCHAR},
+      </if>
+      <if test="serviceType != null">
+        service_type = #{serviceType,jdbcType=VARCHAR},
+      </if>
+      <if test="specialLineCode != null">
+        special_line_code = #{specialLineCode,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.ahdms.billing.model.ServiceInfo">
+    update service_info
+    set service_name = #{serviceName,jdbcType=VARCHAR},
+      service_encode = #{serviceEncode,jdbcType=VARCHAR},
+      service_type = #{serviceType,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+
+  <select id="findAll" resultType="com.ahdms.billing.model.ServiceInfo" resultMap="BaseResultMap">
+    select * from service_info
+  </select>
+
+  <select id="selectByServiceType" resultType="com.ahdms.billing.model.ServiceInfo" resultMap="BaseResultMap">
+    select service_encode,service_type from service_info GROUP BY service_encode
+  </select>
+  <select id="selectByServiceCode" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from service_info
+    where service_encode = #{service_encode,jdbcType=VARCHAR}
+  </select>
+
+  <select id="selectByServiceEncode" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from service_info
+    where service_encode = #{service_encode,jdbcType=VARCHAR}
+  </select>
+
+  <select id="selectLikeServiceName" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from service_info
+     <where>
+      <if test="serviceName != null and serviceName !='' ">
+         and service_name like concat('%',#{serviceName},'%')
+      </if>
+      <if test="serviceType != null and serviceType !='' ">
+         and service_type = #{serviceType}
+      </if>
+    </where>
+  </select>
+
+  <select id="selectLikeServiceEncode" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from service_info
+    <where>
+      <if test="serviceEncode != null and serviceEncode !='' ">
+         and service_encode like concat('%',#{serviceEncode},'%')
+      </if>
+      <if test="serviceType != null and serviceType !='' ">
+         and service_type = #{serviceType}
+      </if>
+    </where>
+  </select>
+
+  <select id="queryByServiceName" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from service_info
+    where service_name = #{serviceName,jdbcType=VARCHAR}
+  </select>
+
+  <select id="queryByServiceEncode" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select s.*,t.type_name from service_info s,service_type t 
+    where s.service_encode = #{serviceEncode,jdbcType=VARCHAR} and s.service_type = t.id;
+  </select>
+
+  <select id="selectServiceByType" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    s.*, t.type_name
+    from service_info s,service_type t 
+    where service_type = #{service_type,jdbcType=VARCHAR} and s.service_type = t.id
+  </select>
+
+</mapper>

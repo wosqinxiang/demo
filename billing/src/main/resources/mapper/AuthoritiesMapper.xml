@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ahdms.billing.dao.AuthoritiesMapper">
+  <resultMap id="BaseResultMap" type="com.ahdms.billing.model.Authorities">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="authority" jdbcType="VARCHAR" property="authority" />
+    <result column="auth_name" jdbcType="VARCHAR" property="authName" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, authority, auth_name
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from authorities
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from authorities
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.ahdms.billing.model.Authorities">
+    insert into authorities (id, authority, auth_name
+      )
+    values (#{id,jdbcType=INTEGER}, #{authority,jdbcType=VARCHAR}, #{authName,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.ahdms.billing.model.Authorities">
+    insert into authorities
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="authority != null">
+        authority,
+      </if>
+      <if test="authName != null">
+        auth_name,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="authority != null">
+        #{authority,jdbcType=VARCHAR},
+      </if>
+      <if test="authName != null">
+        #{authName,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.ahdms.billing.model.Authorities">
+    update authorities
+    <set>
+      <if test="authority != null">
+        authority = #{authority,jdbcType=VARCHAR},
+      </if>
+      <if test="authName != null">
+        auth_name = #{authName,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.ahdms.billing.model.Authorities">
+    update authorities
+    set authority = #{authority,jdbcType=VARCHAR},
+      auth_name = #{authName,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

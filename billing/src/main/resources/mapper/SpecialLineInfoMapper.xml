@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ahdms.billing.dao.SpecialLineInfoMapper">
+  <resultMap id="BaseResultMap" type="com.ahdms.billing.model.SpecialLineInfo">
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="code" jdbcType="VARCHAR" property="code" />
+    <result column="provider_id" jdbcType="VARCHAR" property="providerId" />
+  </resultMap>
+  
+  <resultMap id="VOResultMap" type="com.ahdms.billing.vo.SpecialLineVO">
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="code" jdbcType="VARCHAR" property="code" />
+    <result column="provider_name" jdbcType="VARCHAR" property="providerName" />
+    <result column="provider_id" jdbcType="VARCHAR" property="providerId" />
+  </resultMap>
+  
+  <sql id="Base_Column_List">
+    id, name, code, provider_id
+  </sql>
+  
+  <select id="findSpecialByProviderIdAndServiceId" parameterType="java.lang.String" resultMap="BaseResultMap">
+    SELECT si.* FROM specialline_serviceinfo ssi,special_line_info si,provider_info p 
+    WHERE 
+    ssi.service_info_id = #{serviceId,jdbcType=VARCHAR} 
+    AND p.id = #{providerId,jdbcType=VARCHAR} 
+    AND ssi.special_line_id = si.id 
+    AND si.provider_id = p.id 
+  </select>
+  
+  <select id="selectByCode" parameterType="java.lang.String" resultMap="VOResultMap">
+    select si.*,p.provider_name from special_line_info si,provider_info p 
+    where p.id = si.provider_id and si.code = #{code,jdbcType=VARCHAR}
+  </select>
+  
+  <select id="selectByNameOrCode" parameterType="com.ahdms.billing.model.SpecialLineInfo" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from special_line_info
+    where (code = #{code,jdbcType=VARCHAR} or (name = #{name} and provider_id = #{providerId}))
+      <if test="id != null and id != ''">
+        and id !=  #{id,jdbcType=VARCHAR}
+      </if>
+  </select>
+  
+   <select id="findSpecialLine" parameterType="com.ahdms.billing.vo.query.SpecialLineQueryVO" resultMap="VOResultMap">
+    select 
+   	s.*,p.provider_name 
+    from special_line_info s,provider_info p where s.provider_id = p.id 
+      <if test="providerId != null and providerId != ''">
+        and s.provider_id =  #{providerId,jdbcType=VARCHAR}
+      </if>
+      <if test="code != null and code != ''">
+        and code like concat('%',#{code},'%')
+      </if>
+      <if test="name != null and name != ''">
+        and name like concat('%',#{name},'%')
+      </if>
+  </select>
+  
+  
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from special_line_info
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from special_line_info
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.ahdms.billing.model.SpecialLineInfo">
+    insert into special_line_info (id, name, code, 
+      provider_id)
+    values (#{id,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{code,jdbcType=VARCHAR}, 
+      #{providerId,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.ahdms.billing.model.SpecialLineInfo">
+    insert into special_line_info
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="name != null">
+        name,
+      </if>
+      <if test="code != null">
+        code,
+      </if>
+      <if test="providerId != null">
+        provider_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="code != null">
+        #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="providerId != null">
+        #{providerId,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.ahdms.billing.model.SpecialLineInfo">
+    update special_line_info
+    <set>
+      <if test="name != null">
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="code != null">
+        code = #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="providerId != null">
+        provider_id = #{providerId,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.ahdms.billing.model.SpecialLineInfo">
+    update special_line_info
+    set name = #{name,jdbcType=VARCHAR},
+      code = #{code,jdbcType=VARCHAR},
+      provider_id = #{providerId,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>
