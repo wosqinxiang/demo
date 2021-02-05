@@ -44,6 +44,7 @@ public enum ApiCode {
 
 
     MANAGE_USER_ACCOUNT_REPEAT("MGE10001","服务账号已存在"),
+    MANAGE_USER_ID_ERROR("MGE10002","用户ID有误"),
     ;
 
     private String code;

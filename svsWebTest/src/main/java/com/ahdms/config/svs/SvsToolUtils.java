@@ -1,6 +1,7 @@
 package com.ahdms.config.svs;
 
 import com.ahdms.bean.model.SvsConfig;
+import com.ahdms.context.SvsContextUtils;
 import com.ahdms.sv.SVTool;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,7 +35,7 @@ public class SvsToolUtils {
 
     public SVTool getDefaultSVTool() throws Exception{
 
-        return getSVTool("test1");
+        return getSVTool(SvsContextUtils.getAccount());
     }
 
     public void removeSVTool(String account) {

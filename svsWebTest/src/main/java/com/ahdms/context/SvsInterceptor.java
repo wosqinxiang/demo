@@ -34,6 +34,7 @@ public class SvsInterceptor implements HandlerInterceptor {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         String account = "";
         try {
+
             account = request.getHeader(HeaderConstants.SVS_USER_ID);
             boolean b = svsConfigCache.checkAccount(account);
             if(b){

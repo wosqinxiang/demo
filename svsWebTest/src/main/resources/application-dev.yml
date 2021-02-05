@@ -1,12 +1,24 @@
-#spring:
-#  datasource:
-#    password: AHdms520
-#    username: root
-#    url: jdbc:mysql://172.16.1.180:3306/imc?serverTimezone=UTC&characterEncoding=utf-8
-#server:
-##  port: 9018
-##
-##svs:
-##  server:
-##    ip: 172.16.1.9
-##    port: 9000
+#svs:
+#  accounts: TianheTest,HaojingTest,JinxiandaiTest
+#  appCodes:
+#    TianheTest:
+#      ip: 134.175.125.95
+#      port: 9000
+#      keyIndex: 5
+#      keyValue: dms123456
+#      serialNumber: 00fed7ba9119cb16e2bf6a4244de
+#      encryptKey: KcyTDoxOG+EiLtuvTHQiKf3UA/KV98nuvsIKKeZea4oAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMoUfsyhRpDc5t1KRF7FffOdirPlZVqWXlU8O2jMSvLdAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACNbaDcIG2SI5dD7Ed/o5Jd/0AG7uPI7+mUqAAXvk1avRAAAACfPa3in3zMUKUOO/8exYwA
+#    HaojingTest:
+#      ip: 134.175.125.95
+#      port: 9000
+#      keyIndex: 5
+#      keyValue: dms123456
+#      serialNumber: 00fed7ba9119cb16e2bf6a4244de
+#      encryptKey: SQl9ghq+gaNbysgQUGkeKVUve06I6oz1TbtHlAASBP4AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAO96URqtWrd1/weVOm1zScWS4w2OMlubmUn0oiwfy1vZAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABptnDTmV0ia/OesgZl4y47yECNcXBNKMNqVK+HMw3mDRAAAAD17p7Kp1JOo6WmHFuUJVdZ
+#    JinxiandaiTest:
+#      ip: 134.175.125.95
+#      port: 9000
+#      keyIndex: 5
+#      keyValue: dms123456
+#      serialNumber: 00fed7ba9119cb16e2bf6a4244de
+#      encryptKey: iOzgyUhiHoaHSnA/vGGble6T+Ehx/YKr9Ck7O8znnwsAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIyT89Xd+sCtufScIDOhwBRU/eJijsFLgY6iOlWfjWvyAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABz8kjMd3yaCcgBNf+jCKgRMoFtk1P0dyjj9Dpm2Ixo/RAAAADIyL39cAFItxcoTcpZkeXD

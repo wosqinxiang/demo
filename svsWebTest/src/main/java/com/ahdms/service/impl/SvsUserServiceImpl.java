@@ -21,6 +21,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import static com.ahdms.code.ApiCode.MANAGE_USER_ID_ERROR;
+
 /**
  * @author qinxiang
  * @date 2021-01-03 9:57
@@ -74,6 +76,9 @@ public class SvsUserServiceImpl implements ISvsUserService {
     @Override
     public SvsUserRspVo queryUser(String id) {
         SvsUser svsUser = svsUserMapper.selectById(id);
+        if(svsUser == null){
+            throw new ApiException(MANAGE_USER_ID_ERROR);
+        }
         SvsUserRspVo rspVo = new SvsUserRspVo();
         rspVo.setId(svsUser.getId());
         rspVo.setAccount(svsUser.getAccount());
@@ -100,6 +105,9 @@ public class SvsUserServiceImpl implements ISvsUserService {
     @Transactional(rollbackFor = Exception.class)
     public void deleteUser(String id) {
         SvsUser svsUser = svsUserMapper.selectById(id);
+        if(svsUser == null){
+            throw new ApiException(MANAGE_USER_ID_ERROR);
+        }
         svsConfigService.deleteById(svsUser.getSvsConfigId());
         svsUserMapper.deleteById(id);
         svsConfigCache.remove(svsUser.getAccount());

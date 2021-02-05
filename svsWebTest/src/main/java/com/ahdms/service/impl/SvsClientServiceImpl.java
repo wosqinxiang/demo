@@ -176,11 +176,7 @@ public class SvsClientServiceImpl implements ISvsClientService {
 
         //组装签名原文byte[]
         byte[] inData = Util.mergeBytes(Util.hexToByte(verifyReqVo.getServerRandom()), Util.hexToByte(verifyReqVo.getClientRandom()));
-        byte[] inData2 = Util.mergeBytes(Util.hexToByte(verifyReqVo.getClientRandom()), Util.hexToByte(verifyReqVo.getServerRandom()));
         //验证签名值
-        boolean b = svsToolUtils.getSVTool(SvsContextUtils.getAccount())
-                .SVS_VerifyData(cert, inData2, signatureBytes, verifyReqVo.getVerifyLevel());
-        System.out.println(b);
         return svsToolUtils.getSVTool(SvsContextUtils.getAccount())
                 .SVS_VerifyData(cert, inData, signatureBytes, verifyReqVo.getVerifyLevel());
 

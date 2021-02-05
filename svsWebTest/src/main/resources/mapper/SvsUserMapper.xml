@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ahdms.dao.ISvsUserMapper">
+
+    <sql id="Base_Column_List">
+        id,account,info,whiteIp,svsConfigId
+    </sql>
+    <select id="selectPageUser" resultType="com.ahdms.bean.rsp.SvsUserPageRspVo">
+        SELECT
+            su.id id,
+            su.account,
+            su.info,
+            sc.ip svsIp,
+            sc.`port` svsPort,
+            sc.key_index svsKeyIndex
+        FROM
+            svs_config sc,
+            svs_user su
+        WHERE
+            su.svs_config_id = sc.id
+
+    </select>
+
+
+</mapper>

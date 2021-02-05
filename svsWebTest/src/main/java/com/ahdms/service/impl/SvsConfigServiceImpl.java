@@ -2,6 +2,7 @@ package com.ahdms.service.impl;
 
 import com.ahdms.bean.model.SvsConfig;
 import com.ahdms.dao.ISvsConfigMapper;
+import com.ahdms.exception.SVS_ServerConnectException;
 import com.ahdms.framework.core.commom.util.StringUtils;
 import com.ahdms.service.ISvsConfigService;
 import com.ahdms.sv.SVTool;
@@ -29,6 +30,7 @@ public class SvsConfigServiceImpl implements ISvsConfigService {
         SVTool svTool = SVTool.getInstance();
         svTool.SVS_InitServerConnect(svsConfig.getIp(), svsConfig.getPort());
         Certificate cert = svTool.SVS_GetCertInfo(svsConfig.getSerialNumber());
+        svTool.SVS_SignData(svsConfig.getKeyIndex(),svsConfig.getKeyValue(),"AHdms".getBytes());
         if (StringUtils.isBlank(svsConfig.getEncryptKey())) {
             byte[] bytes = svTool.SVS_GetCTIDEncryptKey(cert);
             String encryptKey = Base64Utils.encodeToString(bytes);
